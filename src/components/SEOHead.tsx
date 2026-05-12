@@ -35,7 +35,7 @@ export default function SEOHead() {
     }).filter(Boolean).join(', ') || '';
 
     const phone = contactInfo?.phone || '+998 91 999 37 23';
-    const email = contactInfo?.email || 'asadbekjumanazarov@gmail.com';
+    const email = contactInfo?.email || 'asadbekjumanazarov3723@gmail.com';
 
     // Comprehensive keywords - Local SEO + Tech SEO
     // Comprehensive keywords - Local SEO + Tech SEO

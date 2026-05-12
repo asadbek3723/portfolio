@@ -123,7 +123,7 @@ export function generatePersonSchema(
         jobTitle: 'Senior Full Stack Developer',
         description: aboutData?.[contentKey] || defaultDesc,
         url: baseUrl,
-        email: contactInfo?.email || 'asadbekjumanazarov@gmail.com',
+        email: contactInfo?.email || 'asadbekjumanazarov3723@gmail.com',
         telephone: contactInfo?.phone || '+998 91 999 37 23',
         image: `${baseUrl}/photos/asadbek-jumanazarov-portfolio-photos.png`,
         sameAs: [
@@ -155,7 +155,7 @@ export function generateContactPointSchema(
         '@type': 'ContactPoint',
         contactType: 'Customer Service',
         telephone: contactInfo?.phone || '+998 91 999 37 23',
-        email: contactInfo?.email || 'asadbekjumanazarov@gmail.com',
+        email: contactInfo?.email || 'asadbekjumanazarov3723@gmail.com',
         availableLanguage: ['Uzbek', 'English', 'Russian']
     };
 }
@@ -299,7 +299,7 @@ export function generateFAQSchema(aboutData?: AboutSection | null, currentLangua
             },
             {
                 q: "Asadbek Jumanazarov Azamat o'g'li bilan qanday bog'lanish mumkin?",
-                a: "U bilan +998 91 999 37 23 telefon raqami yoki asadbekjumanazarov@gmail.com elektron pochtasi orqali bog'lanish mumkin."
+                a: "U bilan +998 91 999 37 23 telefon raqami yoki asadbekjumanazarov3723@gmail.com elektron pochtasi orqali bog'lanish mumkin."
             }
         ],
         en: [
