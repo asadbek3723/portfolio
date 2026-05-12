@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import SEOBar from './components/SEOBar';
 import './i18n';
 
 // Lazy load components for better performance
@@ -68,6 +69,7 @@ function App() {
           />
         </BrowserRouter>
         <Analytics />
+        <SEOBar />
       </AuthProvider>
     </HelmetProvider>
   );

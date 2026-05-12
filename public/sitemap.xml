@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   
-  <!-- Homepage -->
+  <!-- Homepage and SEO Images -->
   <url>
     <loc>https://jumanazarov.uz/</loc>
     <lastmod>2025-12-27</lastmod>
@@ -11,6 +12,37 @@
     <xhtml:link rel="alternate" hreflang="uz" href="https://jumanazarov.uz/?lang=uz"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://jumanazarov.uz/?lang=en"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://jumanazarov.uz/?lang=ru"/>
+    
+    <image:image>
+      <image:loc>https://jumanazarov.uz/me.png</image:loc>
+      <image:title>Asadbek Jumanazarov Azamat o'g'li</image:title>
+      <image:caption>Asadbek Jumanazarov Azamat o'g'li - IT | Dasturchi | Xorazm | Shovot</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://jumanazarov.uz/photos/asadbek-jumanazarov-it-dasturchi-xorazm.png</image:loc>
+      <image:title>Asadbek Jumanazarov IT Dasturlash Xorazm</image:title>
+      <image:caption>Asadbek Jumanazarov Azamat o'g'li, Xorazm Viloyati Dasturchisi</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://jumanazarov.uz/photos/asadbek-jumanazarov-fullstack-dev-uzbekistan.png</image:loc>
+      <image:title>Asadbek Jumanazarov Full Stack Developer</image:title>
+      <image:caption>O'zbekistondagi eng yaxshi Full Stack dasturchilardan biri</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://jumanazarov.uz/photos/it-akademiya-xorazm-asadbek-jumanazarov.png</image:loc>
+      <image:title>IT Akademiya Xorazm Asadbek Jumanazarov</image:title>
+      <image:caption>Xorazmda IT sohasini rivojlantirayotgan mutaxassis</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://jumanazarov.uz/photos/shovot-it-mutaxassisi-asadbek-jumanazarov.png</image:loc>
+      <image:title>Shovot IT Mutaxassisi</image:title>
+      <image:caption>Shovot tumanining yetakchi IT mutaxassisi Asadbek Jumanazarov</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://jumanazarov.uz/photos/asadbek-jumanazarov-azamat-o-g-li-shaxsiy-rasmi.png</image:loc>
+      <image:title>Asadbek Jumanazarov Azamat o'g'li Shaxsiy Rasmi</image:title>
+      <image:caption>Asadbek Jumanazarov Azamat o'g'li portreti</image:caption>
+    </image:image>
   </url>
 
   <!-- Hero Section -->
