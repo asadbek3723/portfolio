@@ -15,7 +15,7 @@ const resources = {
         contact: "Contact",
       },
       hero: {
-        name: "Asadbek Jumanazarov",
+        name: "Asadbek Jumanazarov Azamat o'g'li",
         title: "Full Stack Developer",
         bio: "I am a full stack developer who creates modern and efficient websites.",
         contactMe: "Contact Me",
@@ -117,7 +117,7 @@ const resources = {
         contact: "Aloqa",
       },
       hero: {
-        name: "Asadbek Jumanazarov",
+        name: "Asadbek Jumanazarov Azamat o'g'li",
         title: "Full Stack Dasturchi",
         bio: "Men zamonaviy va samarali websaytlar yaratadigan full stack dasturchiman.",
         contactMe: "Aloqaga chiqish",
@@ -220,7 +220,7 @@ const resources = {
         contact: "Контакты",
       },
       hero: {
-        name: "Асадбек Жуманазаров",
+        name: "Асадбек Жуманазаров Азамат ўғли",
         title: "Full Stack Разработчик",
         bio: "Я full stack разработчик, создающий современные и эффективные веб-сайты.",
         contactMe: "Связаться со мной",

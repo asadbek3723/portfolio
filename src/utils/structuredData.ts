@@ -117,19 +117,18 @@ export function generatePersonSchema(
     const defaultDesc = 'Professional Full Stack Developer specializing in React, TypeScript, Node.js, and modern web technologies. Experienced in building scalable web applications and e-commerce platforms.';
 
     return {
-        '@context': 'https://schema.org',
         '@type': 'Person',
-        name: 'Asadbek Jumanazarov',
-        jobTitle: 'Full Stack Developer',
+        name: 'Asadbek Jumanazarov Azamatovich',
+        jobTitle: 'Senior Full Stack Developer',
         description: aboutData?.[contentKey] || defaultDesc,
         url: baseUrl,
         email: contactInfo?.email || 'kursant410@gmail.com',
-        telephone: contactInfo?.phone || '+998900033723',
-        image: `${baseUrl}/me.png`,
+        telephone: contactInfo?.phone || '+998200093723',
+        image: `${baseUrl}/photos/asadbek-jumanazarov-portfolio-photos.png`,
         sameAs: [
-            contactInfo?.github_url || 'https://github.com/kursant77',
+            contactInfo?.github_url || 'https://github.com/asadbek3723',
             contactInfo?.linkedin_url || 'https://linkedin.com/in/asadbek',
-            contactInfo?.telegram_url || 'https://t.me/kursant77'
+            contactInfo?.telegram_url || 'https://t.me/jumanazarov3723'
         ].filter(Boolean),
         knowsAbout: [
             'React',

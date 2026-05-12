@@ -83,11 +83,11 @@ export default function SEOHead() {
     return (
         <Helmet>
             {/* Primary Meta Tags */}
-            <title>Asadbek Jumanazarov - Full Stack Developer | {phone}</title>
-            <meta name="title" content={`Asadbek Jumanazarov - Full Stack Developer | Portfolio`} />
+            <title>Asadbek Jumanazarov Azamat o'g'li - Full Stack Developer</title>
+            <meta name="title" content={`Asadbek Jumanazarov Azamat o'g'li - Full Stack Developer | Portfolio`} />
             <meta name="description" content={description} />
             <meta name="keywords" content={keywords} />
-            <meta name="author" content="Asadbek Jumanazarov" />
+            <meta name="author" content="Asadbek Jumanazarov Azamat o'g'li" />
             <meta name="contact" content={email} />
             <meta name="phone" content={phone} />
 
@@ -98,17 +98,17 @@ export default function SEOHead() {
             {/* Open Graph / Facebook */}
             <meta property="og:type" content="website" />
             <meta property="og:url" content={baseUrl} />
-            <meta property="og:title" content="Asadbek Jumanazarov - Full Stack Developer" />
+            <meta property="og:title" content="Asadbek Jumanazarov Azamat o'g'li - Full Stack Developer" />
             <meta property="og:description" content={description} />
-            <meta property="og:image" content={`${baseUrl}/me.png`} />
+            <meta property="og:image" content={`${baseUrl}/photos/asadbek-jumanazarov-portfolio-photos.png`} />
             <meta property="og:locale" content={`${currentLanguage}_${currentLanguage === 'uz' ? 'UZ' : currentLanguage === 'ru' ? 'RU' : 'US'}`} />
 
             {/* Twitter */}
             <meta property="twitter:card" content="summary_large_image" />
             <meta property="twitter:url" content={baseUrl} />
-            <meta property="twitter:title" content="Asadbek Jumanazarov - Full Stack Developer" />
+            <meta property="twitter:title" content="Asadbek Jumanazarov Azamat o'g'li - Full Stack Developer" />
             <meta property="twitter:description" content={description} />
-            <meta property="twitter:image" content={`${baseUrl}/me.png`} />
+            <meta property="twitter:image" content={`${baseUrl}/photos/asadbek-jumanazarov-portfolio-photos.png`} />
 
             {/* Canonical URL */}
             <link rel="canonical" href={baseUrl} />

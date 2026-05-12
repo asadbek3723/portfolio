@@ -166,8 +166,8 @@ export default function Hero() {
                 <img
                   loading="lazy"
                   itemProp="image"
-                  src="/me.png"
-                  alt="Asadbek Jumanazarov"
+                  src="/photos/asadbek-jumanazarov-portfolio-photos.png"
+                  alt="Asadbek Jumanazarov Azamat o'g'li"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
