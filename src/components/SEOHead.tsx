@@ -34,7 +34,7 @@ export default function SEOHead() {
         return s[titleKey] || s.title_uz;
     }).filter(Boolean).join(', ') || '';
 
-    const phone = contactInfo?.phone || '+998200093723';
+    const phone = contactInfo?.phone || '+998 91 999 37 23';
     const email = contactInfo?.email || 'asadbekjumanazarov@gmail.com';
 
     // Comprehensive keywords - Local SEO + Tech SEO
@@ -62,7 +62,7 @@ export default function SEOHead() {
 
     const personalKeywords = [
         'Asadbek Jumanazarov', 'Asadbek', 'Jumanazarov', 'Asadbek Jumanazarov portfolio',
-        'kursant77', 'kursant410', 'asadbekjumanazarov', 'asadbek dev', 'asadbek programmer',
+        'asadbek3723', 'asadbekjumanazarov', 'asadbek dev', 'asadbek programmer',
         phone, phone.replace(/\s/g, ''),
         email, email.split('@')[0]
     ];

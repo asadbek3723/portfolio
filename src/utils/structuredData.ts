@@ -117,13 +117,14 @@ export function generatePersonSchema(
     const defaultDesc = 'Professional Full Stack Developer specializing in React, TypeScript, Node.js, and modern web technologies. Experienced in building scalable web applications and e-commerce platforms.';
 
     return {
+        '@context': 'https://schema.org',
         '@type': 'Person',
-        name: 'Asadbek Jumanazarov Azamatovich',
+        name: "Asadbek Jumanazarov Azamat o'g'li",
         jobTitle: 'Senior Full Stack Developer',
         description: aboutData?.[contentKey] || defaultDesc,
         url: baseUrl,
-        email: contactInfo?.email || 'kursant410@gmail.com',
-        telephone: contactInfo?.phone || '+998200093723',
+        email: contactInfo?.email || 'asadbekjumanazarov@gmail.com',
+        telephone: contactInfo?.phone || '+998 91 999 37 23',
         image: `${baseUrl}/photos/asadbek-jumanazarov-portfolio-photos.png`,
         sameAs: [
             contactInfo?.github_url || 'https://github.com/asadbek3723',
@@ -153,8 +154,8 @@ export function generateContactPointSchema(
         '@context': 'https://schema.org',
         '@type': 'ContactPoint',
         contactType: 'Customer Service',
-        telephone: contactInfo?.phone || '+998900033723',
-        email: contactInfo?.email || 'kursant410@gmail.com',
+        telephone: contactInfo?.phone || '+998 91 999 37 23',
+        email: contactInfo?.email || 'asadbekjumanazarov@gmail.com',
         availableLanguage: ['Uzbek', 'English', 'Russian']
     };
 }
@@ -177,7 +178,7 @@ export function generateProjectSchema(
         image: project.image,
         author: {
             '@type': 'Person',
-            name: 'Asadbek Jumanazarov'
+            name: "Asadbek Jumanazarov Azamat o'g'li"
         },
         dateCreated: project.created_at
     };
@@ -195,7 +196,7 @@ export function generateServiceSchema(
         serviceType: (service[titleKey] as string) || service.title_uz || '',
         provider: {
             '@type': 'Person',
-            name: 'Asadbek Jumanazarov'
+            name: "Asadbek Jumanazarov Azamat o'g'li"
         }
     };
 }
@@ -259,10 +260,10 @@ export function generateWebSiteSchema(baseUrl: string): WebSiteSchema {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         url: baseUrl,
-        name: 'Asadbek Jumanazarov - Full Stack Developer',
+        name: "Asadbek Jumanazarov Azamat o'g'li - Full Stack Developer",
         publisher: {
             '@type': 'Person',
-            name: 'Asadbek Jumanazarov'
+            name: "Asadbek Jumanazarov Azamat o'g'li"
         }
     };
 }
@@ -289,25 +290,25 @@ export function generateFAQSchema(aboutData?: AboutSection | null, currentLangua
     const faqs = {
         uz: [
             {
-                q: "Asadbek Jumanazarov kim?",
-                a: aboutContent || "Asadbek Jumanazarov - O'zbekistonning Xorazm viloyati Shovot tumanidan bo'lgan professional Full Stack dasturchi. U React, TypeScript va Node.js texnologiyalari bo'yicha mutaxassis."
+                q: "Asadbek Jumanazarov Azamat o'g'li kim?",
+                a: aboutContent || "Asadbek Jumanazarov Azamat o'g'li - O'zbekistonning Xorazm viloyati Shovot tumanidan bo'lgan professional Full Stack dasturchi. U React, TypeScript va Node.js texnologiyalari bo'yicha mutaxassis."
             },
             {
-                q: "Asadbek Jumanazarov qanday xizmatlarni taklif qiladi?",
+                q: "Asadbek Jumanazarov Azamat o'g'li qanday xizmatlarni taklif qiladi?",
                 a: "U veb-saytlar yaratish, CRM tizimlarini ishlab chiqish, Telegram botlar yaratish va e-tijorat loyihalarini amalga oshirish xizmatlarini taklif etadi."
             },
             {
-                q: "Asadbek Jumanazarov bilan qanday bog'lanish mumkin?",
-                a: "U bilan +998 90 003 37 23 telefon raqami yoki kursant410@gmail.com elektron pochtasi orqali bog'lanish mumkin."
+                q: "Asadbek Jumanazarov Azamat o'g'li bilan qanday bog'lanish mumkin?",
+                a: "U bilan +998 91 999 37 23 telefon raqami yoki asadbekjumanazarov@gmail.com elektron pochtasi orqali bog'lanish mumkin."
             }
         ],
         en: [
             {
-                q: "Who is Asadbek Jumanazarov?",
-                a: aboutContent || "Asadbek Jumanazarov is a professional Full Stack Developer from Shovot, Khorezm region, Uzbekistan. He specializes in React, TypeScript, and Node.js."
+                q: "Who is Asadbek Jumanazarov Azamat o'g'li?",
+                a: aboutContent || "Asadbek Jumanazarov Azamat o'g'li is a professional Full Stack Developer from Shovot, Khorezm region, Uzbekistan. He specializes in React, TypeScript, and Node.js."
             },
             {
-                q: "What services does Asadbek Jumanazarov offer?",
+                q: "What services does Asadbek Jumanazarov Azamat o'g'li offer?",
                 a: "He offers web development, CRM system development, Telegram bot creation, and e-commerce project implementation."
             }
         ],
