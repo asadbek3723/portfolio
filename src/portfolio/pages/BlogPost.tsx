@@ -44,7 +44,7 @@ export const BlogPost: React.FC = () => {
               </span>
             ))}
           </div>
-          <h1 className="mt-6 break-words font-display text-[1.7rem] font-extrabold leading-[1.1] sm:text-4xl md:text-6xl">
+          <h1 className="mt-6 break-words font-display text-[1.6rem] font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
             {l(post.title)}
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-xl">
