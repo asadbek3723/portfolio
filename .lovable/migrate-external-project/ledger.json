@@ -1,0 +1,8 @@
+[
+ {"capability":"code","source":"Vite + React Router SPA","outcome":"migrate","status":"done","next_action":"none"},
+ {"capability":"routes","source":"21 routes","outcome":"migrate","status":"done","next_action":"none"},
+ {"capability":"assets","source":"public/assets images, favicon","outcome":"migrate","status":"done","next_action":"none"},
+ {"capability":"schema/records/auth","source":"none (static content in code)","outcome":"not applicable","status":"verified","next_action":"none"},
+ {"capability":"contact","source":"mailto link","outcome":"preserve","status":"done","next_action":"none"},
+ {"capability":"secrets/providers/webhooks","source":"none","outcome":"not applicable","status":"verified","next_action":"none"}
+]

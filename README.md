@@ -1,153 +1,36 @@
-# Portfolio Website - Asadbek Jumanazarov
+# Asadbek Jumanazarov — Portfolio
 
-A modern, responsive portfolio website built with React, Tailwind CSS, and Framer Motion.
+Personal portfolio built with TanStack Start (React 19, Vite, Tailwind CSS 4) and Supabase.
+Content is stored in Supabase (one table per collection), images and the CV in Supabase Storage,
+and the site is managed from a built-in admin panel at `/admin`.
 
-## 🚀 Features
+## Stack
+- React 19, TypeScript, TanStack Start / Router, Tailwind CSS 4, Framer Motion
+- Supabase: Postgres + Row Level Security, Auth (admin role), Storage, Realtime
+- Optional AI helper in the admin ("AI bilan yaxshilash") via `LOVABLE_API_KEY` or `OPENAI_API_KEY`
 
-- **Multi-language Support**: English, Uzbek, Russian
-- **Dark/Light Mode**: Toggle between themes
-- **Responsive Design**: Works on all devices
-- **Smooth Animations**: Powered by Framer Motion
-- **Contact Form**: Functional contact form
-- **CV Download**: Download CV in PDF format
-- **Modern UI/UX**: Clean and professional design
-
-## 🛠️ Technologies Used
-
-- React 18
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-- React i18next
-- Lucide React Icons
-
-## 📋 Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd portfolio-website
+## Getting started
+```sh
+bun install
+bun run dev        # http://localhost:5173
 ```
 
-2. Install dependencies:
-```bash
-npm install
+Public Supabase settings are in `.env`. Server-only secrets go in `.env.local` (git-ignored); see `.env.example`.
+
+## Database
+```sh
+bun run db:migrate   # apply supabase/migrations/*.sql (needs SUPABASE_DB_URL)
+bun run db:seed      # upload images + write built-in content (use -- --force to overwrite)
+ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='...' bun run db:admin   # create the admin account
 ```
 
-3. Start the development server:
-```bash
-npm run dev
-```
+## Scripts
+| Command | What it does |
+| --- | --- |
+| `bun run dev` | Development server |
+| `bun run build` | Production build |
+| `bun run test` | Unit tests (Vitest) |
 
-4. Open your browser and visit `http://localhost:5173`
-
-## 🏗️ Build for Production
-
-```bash
-npm run build
-```
-
-The built files will be in the `dist` directory.
-
-## 📁 Project Structure
-
-```
-src/
-├── components/         # React components
-│   ├── Navbar.tsx     # Navigation component
-│   ├── Hero.tsx       # Hero section
-│   ├── Skills.tsx     # Skills section
-│   ├── Projects.tsx   # Projects showcase
-│   ├── Services.tsx   # Services section
-│   ├── CV.tsx         # CV section
-│   ├── Contact.tsx    # Contact form
-│   └── Footer.tsx     # Footer component
-├── contexts/          # React contexts
-│   └── ThemeContext.tsx # Theme management
-├── i18n/             # Internationalization
-│   └── index.ts      # Language configuration
-├── App.tsx           # Main App component
-├── main.tsx          # Entry point
-└── index.css         # Global styles
-```
-
-## 🌍 Languages
-
-- **English** (EN)
-- **Uzbek** (UZ) - Default
-- **Russian** (RU)
-
-## 🔐 Admin Panel
-
-Bu loyiha Supabase backend bilan ishlaydigan admin panelga ega. Admin panel orqali barcha ma'lumotlarni boshqarishingiz mumkin.
-
-### Admin Panelga Kirish
-
-1. `/admin/login` sahifasiga kiring
-2. Supabase da yaratilgan admin user email va password bilan kiring
-3. Admin dashboard da quyidagilarni boshqarishingiz mumkin:
-   - **Skills**: Ko'nikmalar qo'shish, tahrirlash, o'chirish
-   - **Projects**: Loyihalar qo'shish, tahrirlash, o'chirish
-   - **Services**: Xizmatlar qo'shish, tahrirlash, o'chirish
-   - **Contact**: Aloqa ma'lumotlarini tahrirlash
-   - **CV**: CV ma'lumotlarini tahrirlash
-
-### Supabase Setup
-
-Batafsil qo'llanma uchun `SUPABASE_SETUP.md` faylini ko'ring.
-
-### Environment Variables
-
-`.env` fayl yarating va quyidagilarni qo'shing:
-
-```
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-## 🎨 Customization
-
-### Adding New Projects
-
-Edit the `projects` array in `src/components/Projects.tsx` and add corresponding translations in `src/i18n/index.ts`.
-
-### Modifying Colors
-
-Update the color scheme in `tailwind.config.js` to match your preferred brand colors.
-
-### Adding New Sections
-
-Create new components in the `src/components/` directory and import them in `App.tsx`.
-
-## 📞 Contact Information
-
-- **Phone**: +998 90 003 37 23
-- **Email**: kursant410@gmail.com
-- **GitHub**: [GitHub Profile]
-- **Telegram**: [Telegram Profile]
-- **LinkedIn**: [LinkedIn Profile]
-
-## 🚀 Deployment
-
-### Vercel ga Deploy qilish
-
-1. GitHub repository ga push qiling
-2. [Vercel](https://vercel.com) ga kiring va project yarating
-3. Environment variables qo'shing:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-4. Deploy qiling!
-
-Batafsil qo'llanma uchun `DEPLOYMENT.md` faylini ko'ring.
-
-### Build Command
-
-```bash
-npm run build
-```
-
-Build fayllar `dist` papkasida yaratiladi.
-
-## 📄 License
-
-© 2025 Asadbek Jumanazarov. All rights reserved.
+## Deploy (Vercel)
+`vercel.json` builds with the Vercel preset (`NITRO_PRESET=vercel`). Set `VITE_SUPABASE_URL` and
+`VITE_SUPABASE_PUBLISHABLE_KEY` (already in `.env`) and, for the admin AI page, `OPENAI_API_KEY`.
