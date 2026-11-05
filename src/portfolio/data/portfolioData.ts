@@ -35,7 +35,7 @@ export const profileData: ProfileSettings = {
     "en": "Shovot, Khorezm, Uzbekistan",
     "ru": "Шават, Хорезм, Узбекистан"
   },
-  "portrait": "/assets/asadbek-portrait.jpg",
+  "portrait": "/assets/asadbek-jumanazarov-software-developer.jpg",
   "socials": [
     {
       "label": "GitHub",
@@ -94,9 +94,9 @@ export const projectsData: Project[] = [
       "Chat UI",
       "Render"
     ],
-    "cover": "/assets/project-uzex-ai.jpg",
+    "cover": "/assets/uzex-ai-chat-platform-exchange-trades.jpg",
     "images": [
-      "/assets/project-uzex-ai.jpg"
+      "/assets/uzex-ai-chat-platform-exchange-trades.jpg"
     ],
     "liveUrl": "https://uzex-ai.onrender.com/",
     "detail": {
@@ -225,7 +225,7 @@ export const projectsData: Project[] = [
       "media": [
         {
           "type": "image",
-          "src": "/assets/project-uzex-ai.jpg",
+          "src": "/assets/uzex-ai-chat-platform-exchange-trades.jpg",
           "caption": {
             "uz": "Bosh ekran",
             "en": "Main screen",
@@ -267,9 +267,9 @@ export const projectsData: Project[] = [
       "i18n (EN/ES)",
       "Vercel"
     ],
-    "cover": "/assets/project-mazzy.jpg",
+    "cover": "/assets/mazzy-express-auto-transport-platform.jpg",
     "images": [
-      "/assets/project-mazzy.jpg"
+      "/assets/mazzy-express-auto-transport-platform.jpg"
     ],
     "liveUrl": "https://www.mazzyexpress.com",
     "detail": {
@@ -386,7 +386,7 @@ export const projectsData: Project[] = [
       "media": [
         {
           "type": "image",
-          "src": "/assets/project-mazzy.jpg",
+          "src": "/assets/mazzy-express-auto-transport-platform.jpg",
           "caption": {
             "uz": "Bosh sahifa",
             "en": "Home page",
@@ -428,10 +428,10 @@ export const projectsData: Project[] = [
       "Exam server",
       "Windows"
     ],
-    "cover": "/assets/project-ielts-exam-1.jpg",
+    "cover": "/assets/ielts-imperia-mock-exam-platform-student-dashboard.jpg",
     "images": [
-      "/assets/project-ielts-exam-1.jpg",
-      "/assets/project-ielts-exam-2.jpg"
+      "/assets/ielts-imperia-mock-exam-platform-student-dashboard.jpg",
+      "/assets/ielts-imperia-mock-exam-platform-admin-tests.jpg"
     ],
     "detail": {
       "role": {
@@ -593,7 +593,7 @@ export const projectsData: Project[] = [
       "media": [
         {
           "type": "image",
-          "src": "/assets/project-ielts-exam-1.jpg",
+          "src": "/assets/ielts-imperia-mock-exam-platform-student-dashboard.jpg",
           "caption": {
             "uz": "O'quvchi paneli",
             "en": "Student dashboard",
@@ -602,7 +602,7 @@ export const projectsData: Project[] = [
         },
         {
           "type": "image",
-          "src": "/assets/project-ielts-exam-2.jpg",
+          "src": "/assets/ielts-imperia-mock-exam-platform-admin-tests.jpg",
           "caption": {
             "uz": "Admin: testlar ro'yxati",
             "en": "Admin: tests list",
@@ -644,9 +644,9 @@ export const projectsData: Project[] = [
       "Supabase",
       "Vercel"
     ],
-    "cover": "/assets/project-ielts.jpg",
+    "cover": "/assets/ielts-imperia-learning-platform-website.jpg",
     "images": [
-      "/assets/project-ielts.jpg"
+      "/assets/ielts-imperia-learning-platform-website.jpg"
     ],
     "liveUrl": "https://ieltsimperia.uz",
     "detail": {
@@ -768,7 +768,7 @@ export const projectsData: Project[] = [
       "media": [
         {
           "type": "image",
-          "src": "/assets/project-ielts.jpg",
+          "src": "/assets/ielts-imperia-learning-platform-website.jpg",
           "caption": {
             "uz": "Bosh sahifa",
             "en": "Home page",
@@ -811,9 +811,9 @@ export const projectsData: Project[] = [
       "Vite",
       "Vercel"
     ],
-    "cover": "/assets/project-house.jpg",
+    "cover": "/assets/house-mobile-phone-marketplace.jpg",
     "images": [
-      "/assets/project-house.jpg"
+      "/assets/house-mobile-phone-marketplace.jpg"
     ],
     "liveUrl": "https://housemobile.vercel.app/",
     "detail": {
@@ -936,7 +936,7 @@ export const projectsData: Project[] = [
       "media": [
         {
           "type": "image",
-          "src": "/assets/project-house.jpg",
+          "src": "/assets/house-mobile-phone-marketplace.jpg",
           "caption": {
             "uz": "Bosh sahifa",
             "en": "Home page",
@@ -976,9 +976,9 @@ export const projectsData: Project[] = [
       "React",
       "Responsive UI"
     ],
-    "cover": "/assets/project-doner.jpg",
+    "cover": "/assets/doner-food-fast-food-website.jpg",
     "images": [
-      "/assets/project-doner.jpg"
+      "/assets/doner-food-fast-food-website.jpg"
     ],
     "liveUrl": "https://donerfood.uz",
     "detail": {
@@ -1080,7 +1080,7 @@ export const projectsData: Project[] = [
       "media": [
         {
           "type": "image",
-          "src": "/assets/project-doner.jpg",
+          "src": "/assets/doner-food-fast-food-website.jpg",
           "caption": {
             "uz": "Bosh sahifa",
             "en": "Home page",
@@ -2302,10 +2302,10 @@ export const achievementsData: Achievement[] = [
       "en": "1st place",
       "ru": "1 место"
     },
-    "cover": "/assets/hackathon-1.jpg",
+    "cover": "/assets/national-ai-hackathon-khorezm-2026-winners-podium.jpg",
     "detail": {
       "slug": "national-ai-hackathon-1st-place",
-      "cover": "/assets/hackathon-1.jpg",
+      "cover": "/assets/national-ai-hackathon-khorezm-2026-winners-podium.jpg",
       "story": {
         "uz": "National AI Hackathon: Khorezm 2026-yil 17–20 sentabr kunlari bo'lib o'tdi. Biz jamoa bilan loyihani noldan yaratdik, hakamlar hay'ati oldida taqdim etdik va 1-o'rinni egalladik. Sovrin — MacBook Air M5. Eng qadrlisi esa bu natijaga jamoa bo'lib erishganimiz edi.",
         "en": "National AI Hackathon: Khorezm took place on 17–20 September 2026. Together with my team we built the project from scratch, presented it to the jury and took 1st place, winning a MacBook Air M5. The best part was getting there as a team.",
@@ -2324,23 +2324,23 @@ export const achievementsData: Achievement[] = [
       "media": [
         {
           "type": "image",
-          "src": "/assets/hackathon-1.jpg"
+          "src": "/assets/national-ai-hackathon-khorezm-2026-winners-podium.jpg"
         },
         {
           "type": "image",
-          "src": "/assets/hackathon-2.jpg"
+          "src": "/assets/carvision-pitch-national-ai-hackathon-2026-asadbek-jumanazarov.jpg"
         },
         {
           "type": "image",
-          "src": "/assets/hackathon-3.jpg"
+          "src": "/assets/asadbek-jumanazarov-presenting-carvision-hackathon-stage.jpg"
         },
         {
           "type": "image",
-          "src": "/assets/hackathon-4.jpg"
+          "src": "/assets/national-ai-hackathon-khorezm-2026-team-banner.jpg"
         },
         {
           "type": "image",
-          "src": "/assets/hackathon-5.jpg"
+          "src": "/assets/national-ai-hackathon-khorezm-2026-team-carvision.jpg"
         }
       ]
     }
@@ -2493,10 +2493,10 @@ export const eventsData: EventItem[] = [
       "en": "A national AI hackathon: a four-day competition where we won with CarVision.",
       "ru": "Национальный хакатон по ИИ: четырёхдневное соревнование, в котором мы победили с проектом CarVision."
     },
-    "cover": "/assets/hackathon-1.jpg",
+    "cover": "/assets/national-ai-hackathon-khorezm-2026-winners-podium.jpg",
     "detail": {
       "slug": "national-ai-hackathon-khorezm",
-      "cover": "/assets/hackathon-1.jpg",
+      "cover": "/assets/national-ai-hackathon-khorezm-2026-winners-podium.jpg",
       "story": {
         "uz": "National AI Hackathon: Khorezm 2026-yil 17–20 sentabr kunlari bo'lib o'tdi. Jamoamiz — Asadbek Jumanazarov, Mirkomil Atakhanov va Amirbek Nodirbekov — CarVision loyihasini yaratib, hakamlarga taqdim etdi va 1-o'rinni qo'lga kiritdi.",
         "en": "National AI Hackathon: Khorezm ran on 17–20 September 2026. Our team — Asadbek Jumanazarov, Mirkomil Atakhanov and Amirbek Nodirbekov — built CarVision, pitched it to the jury and won 1st place.",
@@ -2549,23 +2549,23 @@ export const eventsData: EventItem[] = [
       "media": [
         {
           "type": "image",
-          "src": "/assets/hackathon-1.jpg"
+          "src": "/assets/national-ai-hackathon-khorezm-2026-winners-podium.jpg"
         },
         {
           "type": "image",
-          "src": "/assets/hackathon-2.jpg"
+          "src": "/assets/carvision-pitch-national-ai-hackathon-2026-asadbek-jumanazarov.jpg"
         },
         {
           "type": "image",
-          "src": "/assets/hackathon-3.jpg"
+          "src": "/assets/asadbek-jumanazarov-presenting-carvision-hackathon-stage.jpg"
         },
         {
           "type": "image",
-          "src": "/assets/hackathon-4.jpg"
+          "src": "/assets/national-ai-hackathon-khorezm-2026-team-banner.jpg"
         },
         {
           "type": "image",
-          "src": "/assets/hackathon-5.jpg"
+          "src": "/assets/national-ai-hackathon-khorezm-2026-team-carvision.jpg"
         }
       ],
       "links": []
@@ -2576,56 +2576,56 @@ export const eventsData: EventItem[] = [
 export const galleryData: GalleryItem[] = [
   {
     "id": "2",
-    "src": "/assets/hackathon-1.jpg",
+    "src": "/assets/national-ai-hackathon-khorezm-2026-winners-podium.jpg",
     "caption": {
-      "uz": "Podiumda: 1-o'rin sovrinlarini qabul qilish",
-      "en": "On the podium: receiving the 1st place prizes",
-      "ru": "На подиуме: получение призов за 1 место"
+      "uz": "National AI Hackathon: Khorezm 2026 g'oliblari podiumda — Asadbek Jumanazarov jamoasi 1-o'rin sovrinlari bilan",
+      "en": "National AI Hackathon: Khorezm 2026 winners on the podium — Asadbek Jumanazarov's team with the 1st place prizes",
+      "ru": "Победители National AI Hackathon: Khorezm 2026 на подиуме — команда Асадбека Жуманазарова с призами за 1 место"
     }
   },
   {
     "id": "3",
-    "src": "/assets/hackathon-2.jpg",
+    "src": "/assets/carvision-pitch-national-ai-hackathon-2026-asadbek-jumanazarov.jpg",
     "caption": {
-      "uz": "CarVision taqdimoti: \"Muammo nimada?\"",
-      "en": "CarVision pitch: \"What is the problem?\"",
-      "ru": "Питч CarVision: «В чём проблема?»"
+      "uz": "Asadbek Jumanazarov CarVision loyihasini taqdim etmoqda — \"Muammo nimada?\" slayidi, National AI Hackathon 2026",
+      "en": "Asadbek Jumanazarov pitching the CarVision project — \"What is the problem?\" slide, National AI Hackathon 2026",
+      "ru": "Асадбек Жуманазаров представляет проект CarVision — слайд «В чём проблема?», National AI Hackathon 2026"
     }
   },
   {
     "id": "4",
-    "src": "/assets/hackathon-3.jpg",
+    "src": "/assets/asadbek-jumanazarov-presenting-carvision-hackathon-stage.jpg",
     "caption": {
-      "uz": "Hakaton sahnasida taqdimot",
-      "en": "Presenting on the hackathon stage",
-      "ru": "Выступление на сцене хакатона"
+      "uz": "Asadbek Jumanazarov National AI Hackathon sahnasida CarVision taqdimotini o'tkazmoqda",
+      "en": "Asadbek Jumanazarov presenting CarVision on the National AI Hackathon stage",
+      "ru": "Асадбек Жуманазаров на сцене National AI Hackathon с презентацией CarVision"
     }
   },
   {
     "id": "5",
-    "src": "/assets/hackathon-4.jpg",
+    "src": "/assets/national-ai-hackathon-khorezm-2026-team-banner.jpg",
     "caption": {
-      "uz": "Hakaton ishtirokchilari bilan",
-      "en": "With fellow hackathon participants",
-      "ru": "С участниками хакатона"
+      "uz": "National AI Hackathon: Khorezm 2026 — CarVision jamoasi tashkilotchilar bannerida",
+      "en": "National AI Hackathon: Khorezm 2026 — the CarVision team in front of the organizers' banner",
+      "ru": "National AI Hackathon: Khorezm 2026 — команда CarVision на фоне баннера организаторов"
     }
   },
   {
     "id": "6",
-    "src": "/assets/hackathon-5.jpg",
+    "src": "/assets/national-ai-hackathon-khorezm-2026-team-carvision.jpg",
     "caption": {
-      "uz": "Jamoamiz hakaton maydonida",
-      "en": "Our team at the hackathon venue",
-      "ru": "Наша команда на площадке хакатона"
+      "uz": "National AI Hackathon: Khorezm 2026 — CarVision jamoasi hackathon maydonida",
+      "en": "National AI Hackathon: Khorezm 2026 — the CarVision team at the hackathon venue",
+      "ru": "National AI Hackathon: Khorezm 2026 — команда CarVision на площадке хакатона"
     }
   },
   {
     "id": "1",
-    "src": "/assets/gallery-asadbek-1.jpg",
+    "src": "/assets/asadbek-jumanazarov-formal-portrait.jpg",
     "caption": {
-      "uz": "Asadbek Jumanazarov",
-      "en": "Asadbek Jumanazarov",
-      "ru": "Асадбек Жуманазаров"
+      "uz": "Asadbek Jumanazarov — Software Developer, TriCorp hammuassisi (rasmiy portret)",
+      "en": "Asadbek Jumanazarov — Software Developer and Co-Founder of TriCorp (formal portrait)",
+      "ru": "Асадбек Жуманазаров — Software Developer, сооснователь TriCorp (официальный портрет)"
     }
   }
 ];

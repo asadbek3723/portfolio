@@ -37,8 +37,10 @@ export const Gallery: React.FC = () => {
               >
                 <img
                   src={item.src}
-                  alt={l(item.caption)}
-                  loading="lazy"
+                  alt={`${l(item.caption)} — Asadbek Jumanazarov`}
+                  title={l(item.caption)}
+                  loading={idx < 3 ? 'eager' : 'lazy'}
+                  decoding="async"
                   className={`w-full object-cover transition-transform duration-700 group-hover:scale-105 ${item.tall ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}
                 />
                 <div className="absolute inset-0 flex items-end bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100">

@@ -17,6 +17,7 @@ import { Route as CvRouteImport } from './routes/cv'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as MatchRouteImport } from './routes/match'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SkillsRouteImport } from './routes/skills'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as UsesRouteImport } from './routes/uses'
@@ -81,6 +82,11 @@ const GalleryRoute = GalleryRouteImport.update({
 const MatchRoute = MatchRouteImport.update({
   id: '/match',
   path: '/match',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SkillsRoute = SkillsRouteImport.update({
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/match': typeof MatchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skills': typeof SkillsRoute
   '/testimonials': typeof TestimonialsRoute
   '/uses': typeof UsesRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/match': typeof MatchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skills': typeof SkillsRoute
   '/testimonials': typeof TestimonialsRoute
   '/uses': typeof UsesRoute
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
   '/match': typeof MatchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skills': typeof SkillsRoute
   '/testimonials': typeof TestimonialsRoute
   '/uses': typeof UsesRoute
@@ -326,6 +335,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/gallery'
     | '/match'
+    | '/sitemap.xml'
     | '/skills'
     | '/testimonials'
     | '/uses'
@@ -360,6 +370,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/gallery'
     | '/match'
+    | '/sitemap.xml'
     | '/skills'
     | '/testimonials'
     | '/uses'
@@ -394,6 +405,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/gallery'
     | '/match'
+    | '/sitemap.xml'
     | '/skills'
     | '/testimonials'
     | '/uses'
@@ -430,6 +442,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
   MatchRoute: typeof MatchRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SkillsRoute: typeof SkillsRoute
   TestimonialsRoute: typeof TestimonialsRoute
   UsesRoute: typeof UsesRoute
@@ -503,6 +516,13 @@ declare module '@tanstack/react-router' {
       path: '/match'
       fullPath: '/match'
       preLoaderRoute: typeof MatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/skills': {
@@ -732,6 +752,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
   MatchRoute: MatchRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SkillsRoute: SkillsRoute,
   TestimonialsRoute: TestimonialsRoute,
   UsesRoute: UsesRoute,

@@ -1,16 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Achievements } from "@/portfolio/pages/Achievements";
+import { loadSeo, pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/achievements/")({
-  head: () => ({
-    meta: [
-      { title: "Achievements — Asadbek Jumanazarov" },
-      { name: "description", content: "Achievements from the portfolio of Asadbek Jumanazarov, software engineer from Uzbekistan." },
-      { property: "og:title", content: "Achievements — Asadbek Jumanazarov" },
-      { property: "og:description", content: "Achievements from the portfolio of Asadbek Jumanazarov, software engineer from Uzbekistan." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  loader: () => loadSeo(),
+  head: ({ loaderData }) => pageHead("/achievements", loaderData),
   component: Achievements,
 });
