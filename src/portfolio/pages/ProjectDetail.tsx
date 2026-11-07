@@ -38,7 +38,7 @@ export const ProjectDetail: React.FC = () => {
         <div className="space-y-8">
           {d.features.map((f, i) => (
             <div key={i}>
-              <h4 className="font-display text-xl font-bold">{l(f.title)}</h4>
+              <h3 className="font-display text-xl font-bold">{l(f.title)}</h3>
               <p className="mt-2 leading-relaxed text-muted-foreground">{l(f.text)}</p>
             </div>
           ))}
@@ -57,9 +57,9 @@ export const ProjectDetail: React.FC = () => {
               <div className="space-y-8">
                 {d.stackGroups.map((sg, i) => (
                   <div key={i}>
-                    <h4 className="mb-3 font-mono text-sm uppercase tracking-widest text-muted-foreground">
+                    <h3 className="mb-3 font-mono text-sm uppercase tracking-widest text-muted-foreground">
                       {l(sg.group)}
-                    </h4>
+                    </h3>
                     <StackBadges items={sg.items} />
                   </div>
                 ))}

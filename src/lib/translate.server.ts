@@ -1,6 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { Output, streamText, type LanguageModel } from "ai";
 import { z } from "zod";
+import { groqJson, hasGroq } from "./groq.server";
 
 export type TranslateEntry = { id: string; text: string };
 export type AiMode = "improve" | "translate";
@@ -45,15 +46,37 @@ function provider() {
   return null;
 }
 
+/** Groq first (all models x all keys, rotating on limits); the gateway/OpenAI provider is the last fallback. */
+async function runGroq(entries: TranslateEntry[], system: string): Promise<TranslateResult | null> {
+  if (!hasGroq()) return null;
+  const res = await groqJson(
+    `${system}\nRespond with a single JSON object only: {"items":[{"id":string,"uz":string,"en":string,"ru":string}]}.`,
+    JSON.stringify(entries),
+  );
+  if (!res.ok) return res.error === "busy" ? { ok: false, error: "busy" } : null;
+  try {
+    const parsed = schema.parse(JSON.parse(res.content));
+    const ids = new Set(entries.map((e) => e.id));
+    const items = parsed.items.filter((i) => ids.has(i.id));
+    if (items.length) return { ok: true, items };
+  } catch (err) {
+    console.error("groq output invalid", res.model, err instanceof Error ? err.message : err);
+  }
+  return null;
+}
+
 export async function runTranslate(entries: TranslateEntry[], context: string, mode: AiMode = "translate", instruction = ""): Promise<TranslateResult> {
+  const system = `${PROMPTS[mode]}\n${RULES}\nContext: ${context.slice(0, 200)}${instruction ? `\nExtra instruction from the author (follow it if it does not break the rules above): ${instruction.slice(0, 300)}` : ""}`;
+  const groq = await runGroq(entries, system);
+  if (groq?.ok) return groq;
   const p = provider();
-  if (!p) return { ok: false, error: "unavailable" };
+  if (!p) return groq ?? { ok: false, error: "unavailable" };
   try {
     const result = streamText({
       model: p.model as unknown as LanguageModel,
       maxRetries: 0,
       output: Output.object({ schema }),
-      system: `${PROMPTS[mode]}\n${RULES}\nContext: ${context.slice(0, 200)}${instruction ? `\nExtra instruction from the author (follow it if it does not break the rules above): ${instruction.slice(0, 300)}` : ""}`,
+      system,
       messages: [{ role: "user", content: JSON.stringify(entries) }],
       providerOptions: p.options as never,
     });

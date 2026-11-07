@@ -1,11 +1,10 @@
 import { useRef, useState } from "react";
-import { Download, Upload, Trash2, Mail, Check, Search, ImageIcon, Save } from "lucide-react";
+import { Download, Upload, Trash2, Mail, Check, ImageIcon, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useContent, setContent, logHistory, exportBackup, importBackup } from "../data/store";
-import { collections } from "../collections";
 import { PageTitle, timeAgo } from "../components/ui";
 import { uploadFiles, useAllImages, deleteAsset } from "../components/MediaPicker";
 

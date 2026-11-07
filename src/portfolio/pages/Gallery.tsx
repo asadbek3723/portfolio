@@ -1,5 +1,5 @@
 import { useSiteData } from '@/admin/data/store';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
@@ -7,17 +7,17 @@ import { PageHeader } from '../components/PageHeader';
 import { Section } from '../components/Section';
 import { FadeIn } from '../components/FadeIn';
 import { EASE_CUSTOM } from '../components/Primitives';
+import { useDialogA11y } from '../hooks/useDialogA11y';
+import { responsiveImage } from '@/lib/responsive-image';
 
 export const Gallery: React.FC = () => {
   const { galleryData } = useSiteData();
   const { l } = useLanguage();
   const [active, setActive] = useState<number | null>(null);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setActive(null); };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, []);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const isOpen = active !== null && !!galleryData[active];
+  useDialogA11y(isOpen, () => setActive(null), dialogRef);
 
   return (
     <>
@@ -36,9 +36,8 @@ export const Gallery: React.FC = () => {
                 className="group relative block w-full overflow-hidden rounded-3xl border border-border cursor-pointer"
               >
                 <img
-                  src={item.src}
+                  {...responsiveImage(item.src, '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw')}
                   alt={`${l(item.caption)} — Asadbek Jumanazarov`}
-                  title={l(item.caption)}
                   loading={idx < 3 ? 'eager' : 'lazy'}
                   decoding="async"
                   className={`w-full object-cover transition-transform duration-700 group-hover:scale-105 ${item.tall ? 'aspect-[3/4]' : 'aspect-[4/3]'}`}
@@ -54,6 +53,10 @@ export const Gallery: React.FC = () => {
         <AnimatePresence>
           {active !== null && galleryData[active] && (
             <motion.div
+              ref={dialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label={l(galleryData[active].caption)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -69,7 +72,7 @@ export const Gallery: React.FC = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <img
-                  src={galleryData[active].src}
+                  {...responsiveImage(galleryData[active].src, '(min-width: 896px) 896px, 100vw')}
                   alt={l(galleryData[active].caption)}
                   className="max-h-[80vh] w-full rounded-2xl border border-border object-contain"
                 />

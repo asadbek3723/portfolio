@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from '@/lib/router-compat';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -28,6 +28,12 @@ const ALL_LINKS: TranslationKey[] = [
   'uses',
   'contact',
 ];
+
+const isActivePath = (current: string, path: string): boolean => {
+  const norm = (p: string) => (p.length > 1 ? p.replace(/\/+$/, '') : p);
+  const c = norm(current);
+  return path === '/' ? c === '/' : c === path || c.startsWith(`${path}/`);
+};
 
 const getRoutePath = (key: TranslationKey): string => {
   return key === 'home' ? '/' : `/${key}`;
@@ -59,12 +65,38 @@ export const LanguageSwitcher: React.FC = () => {
 };
 
 export const Navbar: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, l } = useLanguage();
   const emptySections = useEmptySections();
   const links = ALL_LINKS.filter((k) => !emptySections.includes(k));
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  const openMenu = (e: React.MouseEvent<HTMLElement>) => {
+    openerRef.current = e.currentTarget;
+    setIsOpen(true);
+  };
+
+  // Dialog behaviour: Escape closes, Tab stays inside, focus moves in on open and back to the opener on close.
+  useEffect(() => {
+    if (!isOpen) return;
+    const overlay = overlayRef.current;
+    overlay?.querySelector<HTMLElement>('button[aria-label="Close"]')?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { setIsOpen(false); return; }
+      if (e.key !== 'Tab' || !overlay) return;
+      const items = overlay.querySelectorAll<HTMLElement>('a[href], button:not([disabled])');
+      if (!items.length) return;
+      const first = items[0]!;
+      const last = items[items.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', onKey);
+    const opener = openerRef.current;
+    return () => { document.removeEventListener('keydown', onKey); opener?.focus(); };
+  }, [isOpen]);
 
   // Close menu on route change
   useEffect(() => {
@@ -95,7 +127,14 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-primary focus:px-5 focus:py-3 focus:font-bold focus:text-primary-foreground"
+      >
+        {l({ uz: 'Asosiy kontentga o‘tish', en: 'Skip to content', ru: 'Перейти к содержимому' })}
+      </a>
       <nav
+        aria-label="Main"
         className={cn(
           'fixed inset-x-0 top-0 z-50 transition-all duration-500',
           isScrolled ? 'py-3' : 'py-6'
@@ -115,7 +154,7 @@ export const Navbar: React.FC = () => {
           <div className="hidden items-center gap-7 lg:flex">
             {TOP_LINKS.map((key) => {
               const path = getRoutePath(key);
-              const isActive = location.pathname === path;
+              const isActive = isActivePath(location.pathname, path);
               return (
                 <Link
                   key={key}
@@ -130,7 +169,9 @@ export const Navbar: React.FC = () => {
               );
             })}
             <button
-              onClick={() => setIsOpen(true)}
+              onClick={openMenu}
+              aria-expanded={isOpen}
+              aria-haspopup="dialog"
               className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
             >
               {t('more')} +
@@ -144,7 +185,9 @@ export const Navbar: React.FC = () => {
             </div>
             <button
               aria-label="Menu"
-              onClick={() => setIsOpen(true)}
+              aria-expanded={isOpen}
+              aria-haspopup="dialog"
+              onClick={openMenu}
               className="rounded-full border border-border p-2 lg:hidden cursor-pointer hover:bg-surface transition-colors"
             >
               <Menu className="h-4 w-4" />
@@ -157,6 +200,10 @@ export const Navbar: React.FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            ref={overlayRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
             className="fixed inset-0 z-[70] overflow-y-auto bg-background"
             initial={{ clipPath: 'circle(0% at 95% 5%)' }}
             animate={{ clipPath: 'circle(150% at 95% 5%)' }}
@@ -177,7 +224,7 @@ export const Navbar: React.FC = () => {
             <div className="mx-auto grid max-w-7xl gap-x-12 px-6 pb-16 md:grid-cols-3">
               {links.map((key, idx) => {
                 const path = getRoutePath(key);
-                const isActive = location.pathname === path;
+                const isActive = isActivePath(location.pathname, path);
                 return (
                   <motion.div
                     key={key}

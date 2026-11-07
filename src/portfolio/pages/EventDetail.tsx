@@ -4,6 +4,7 @@ import { useParams } from '@/lib/router-compat';
 import { useLanguage } from '../context/LanguageContext';
 import { DetailLayout, LeadText, BulletList, MetricsGrid, MediaGallery, DetailNotFound } from '../components/DetailLayout';
 import type { Localized } from '../types';
+import { safeUrl } from '@/lib/safe-url';
 
 const L = (uz: string, en: string, ru: string): Localized => ({ uz, en, ru });
 
@@ -56,9 +57,9 @@ export const EventDetail: React.FC = () => {
             {d.links.map((link) => (
               <a
                 key={link.url}
-                href={link.url}
+                href={safeUrl(link.url)}
                 target={link.url.startsWith('http') ? '_blank' : undefined}
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 font-medium transition-all hover:border-primary hover:text-primary"
               >
                 {link.label}

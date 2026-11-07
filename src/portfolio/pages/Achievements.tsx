@@ -35,9 +35,9 @@ export const Achievements: React.FC = () => {
               >
                 <span className="min-w-[60px] font-mono text-sm text-muted-foreground">{a.date}</span>
                 <div className="flex-1">
-                  <h3 className="font-display text-2xl font-bold transition-colors group-hover:text-primary md:text-4xl">
+                  <h2 className="font-display text-2xl font-bold transition-colors group-hover:text-primary md:text-4xl">
                     {l(a.title)}
-                  </h3>
+                  </h2>
                   <p className="mt-2 max-w-xl leading-relaxed text-muted-foreground">{l(a.description)}</p>
                 </div>
                 <div className="flex items-center gap-4 self-start md:self-auto">

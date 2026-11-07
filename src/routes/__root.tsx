@@ -2,8 +2,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MotionConfig } from "framer-motion";
 import {
   Outlet,
-  Navigate,
-  Link,
   createRootRouteWithContext,
   useRouter,
   useRouterState,
@@ -17,35 +15,16 @@ import appCss from "../styles.css?url";
 import { LanguageProvider } from "@/portfolio/context/LanguageContext";
 import { Navbar } from "@/portfolio/components/Navbar";
 import { Footer } from "@/portfolio/components/Footer";
+import { NotFoundView } from "@/portfolio/components/NotFoundView";
 import { CursorOrb } from "@/portfolio/components/CursorOrb";
 import { ScrollToTop } from "@/portfolio/components/ScrollToTop";
 import { ScrollProgressBar } from "@/portfolio/components/Primitives";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { loadPublicContent } from "@/lib/public-content";
+import { hydrateContent } from "@/admin/data/store";
 
 function NotFoundComponent() {
-  return <Navigate to="/" replace />;
-}
-
-function _UnusedNotFound() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+  return <NotFoundView />;
 }
 
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
@@ -87,6 +66,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  loader: () => loadPublicContent(),
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -105,12 +85,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
-      },
     ],
   }),
   shellComponent: RootShell,
@@ -127,7 +101,7 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body className="bg-background text-foreground antialiased min-h-screen">
         <noscript>
-          <style>{`[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important;transform:none!important}`}</style>
+          <style>{`[style*="opacity:0"],[style*="opacity: 0"],[style*="translateY(110%)"],[style*="translateY(100%)"]{opacity:1!important;transform:none!important}`}</style>
         </noscript>
         {children}
         <Scripts />
@@ -139,6 +113,8 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const admin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
+  // Same data on the server and in the browser's first render; idempotent for the same loader result.
+  hydrateContent(Route.useLoaderData());
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -150,7 +126,7 @@ function RootComponent() {
         <ScrollProgressBar />
         <div className="relative flex min-h-screen flex-col bg-background text-foreground">
           <Navbar />
-          <main className="flex-1">
+          <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
             <Outlet />
           </main>
           <Footer />

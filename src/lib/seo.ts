@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { abs, COMPANY, JOB_TITLE, PERSON_NAME, SHARE_CARD, SITE_NAME, SITE_URL } from "./site";
 import { OG_FILES } from "./og-files";
+import { jsonForScript, safeIso } from "./safe-url";
 import { seedSeo, type Loc, type SeoContent } from "./seo-content";
 
 export type { SeoContent } from "./seo-content";
@@ -64,8 +65,8 @@ export function buildHead(i: HeadInput) {
     { property: "og:locale:alternate", content: "ru_RU" },
     { property: "og:image", content: image },
     { property: "og:image:secure_url", content: image },
-    { property: "og:image:width", content: "1200" },
-    { property: "og:image:height", content: "630" },
+    // Only the generated /og copies are known to be 1200x630; other images keep their own size.
+    ...(image.includes("/og/") ? [{ property: "og:image:width", content: "1200" }, { property: "og:image:height", content: "630" }] : []),
     { property: "og:image:alt", content: i.imageAlt ?? `${PERSON_NAME} — ${JOB_TITLE}, Co-Founder of ${COMPANY.name}` },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: i.title },
@@ -75,10 +76,11 @@ export function buildHead(i: HeadInput) {
   ];
   if (i.type === "article") {
     meta.push({ property: "article:author", content: abs("/about") });
-    if (i.published) meta.push({ property: "article:published_time", content: new Date(i.published).toISOString() });
+    const published = safeIso(i.published);
+    if (published) meta.push({ property: "article:published_time", content: published });
     for (const tag of i.tags ?? []) meta.push({ property: "article:tag", content: tag });
   }
-  const scripts = (i.jsonLd?.length ? [{ type: "application/ld+json", children: JSON.stringify({ "@context": "https://schema.org", "@graph": i.jsonLd }) }] : []) as { type: string; children: string }[];
+  const scripts = (i.jsonLd?.length ? [{ type: "application/ld+json", children: jsonForScript({ "@context": "https://schema.org", "@graph": i.jsonLd }) }] : []) as { type: string; children: string }[];
   return { meta, links: [{ rel: "canonical", href: url }], scripts };
 }
 

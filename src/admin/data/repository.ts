@@ -1,5 +1,5 @@
-// Repository interface used by the admin. Today: localRepository (browser).
-// Later: implement the same interface against Supabase (see schema.sql).
+// Repository interface used by the admin. Reads and writes go through the content store,
+// which syncs to Supabase (see store.ts, remote.ts and supabase/migrations).
 import { getContent, logHistory, setContent, type ListKey } from "./store";
 
 export type AnyItem = { id: string; _status?: "published" | "draft"; _updatedAt?: string; [k: string]: unknown };

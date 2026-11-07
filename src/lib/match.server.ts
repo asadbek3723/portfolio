@@ -69,6 +69,8 @@ export async function runMatch(input: MatchInput): Promise<MatchResult> {
       // Cast: ai and @ai-sdk/openai pin slightly different provider-spec patch versions.
       model: provider.responses("openai/gpt-6-astra") as unknown as LanguageModel,
       maxRetries: 0,
+      maxOutputTokens: 1500,
+      abortSignal: AbortSignal.timeout(30_000),
       output: Output.object({ schema }),
       system: `You help prospective clients of a freelance software engineer pick relevant services and past portfolio projects.
 Choose ONLY from the catalog slugs below. Return 1-3 services, 1-3 projects and 0-2 blog posts (only posts that genuinely help this client) ranked by relevance, each with a one-sentence reason addressed to the client, written in ${LANG_NAME[input.lang]}.

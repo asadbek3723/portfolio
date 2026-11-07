@@ -11,6 +11,7 @@ import { FadeIn } from '../components/FadeIn';
 import { Counter } from '../components/Counter';
 import { Marquee } from '../components/Marquee';
 import { ProjectCard } from '../components/ProjectCard';
+import { responsiveImage } from '@/lib/responsive-image';
 
 export const Home: React.FC = () => {
   const { profileData, projectsData, skillsData, servicesData, testimonialsData } = useSiteData();
@@ -81,7 +82,7 @@ export const Home: React.FC = () => {
             className="relative mx-auto w-full max-w-sm md:max-w-none"
           >
             <img
-              src={profileData.portrait || '/assets/asadbek-portrait.jpg'}
+              {...responsiveImage(profileData.portrait || '/assets/asadbek-jumanazarov-software-developer.jpg', '(min-width: 768px) 40vw, 384px')}
               alt={profileData.name}
               width={768}
               height={960}

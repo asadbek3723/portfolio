@@ -8,6 +8,7 @@ import { PageHeader } from '../components/PageHeader';
 import { Section } from '../components/Section';
 import { FadeIn } from '../components/FadeIn';
 import { Counter } from '../components/Counter';
+import { responsiveImage } from '@/lib/responsive-image';
 
 export const About: React.FC = () => {
   const { profileData, timelineData } = useSiteData();
@@ -34,7 +35,7 @@ export const About: React.FC = () => {
             <div className="relative">
               <div className="absolute -inset-4 rounded-[2.5rem] bg-orb opacity-40 blur-2xl" />
               <img
-                src={profileData.portrait || '/assets/asadbek-portrait.jpg'}
+                {...responsiveImage(profileData.portrait || '/assets/asadbek-jumanazarov-software-developer.jpg', '(min-width: 768px) 40vw, 90vw')}
                 alt={profileData.name}
                 width={1024}
                 height={1280}
@@ -54,16 +55,16 @@ export const About: React.FC = () => {
               <div className="mt-8 space-y-5 text-muted-foreground leading-relaxed">
                 <p>
                   {l({
-                    uz: "Men Toshkentda tug'ilgan va o'sganman. 2022-yildan buyon veb-dasturlash bilan shug'ullanaman — avval freelance, keyin startuplar va xalqaro mijozlar bilan. Eng ko'p quvonadigan narsam — foydalanuvchi mening yaratgan mahsulotimni ochib, \"voh, zo'r!\" degan payt.",
-                    en: "I was born and raised in Tashkent. Since 2022 I've been building for the web — first freelance, then startups and international clients. Nothing beats the moment a user opens something I built and goes \"wow.\"",
-                    ru: 'Я родился и вырос в Ташкенте. С 2022 года занимаюсь веб-разработкой — сначала фриланс, потом стартапы и международные клиенты.',
+                    uz: "Men Xorazmning Shovot tumanida tug'ilib o'sganman. 2022-yildan buyon veb-dasturlash bilan shug'ullanaman — avval freelance, keyin startuplar va xalqaro mijozlar bilan. Eng ko'p quvonadigan narsam — foydalanuvchi mening yaratgan mahsulotimni ochib, \"voh, zo'r!\" degan payt.",
+                    en: "I was born and raised in Shovot, Khorezm. Since 2022 I've been building for the web — first freelance, then startups and international clients. Nothing beats the moment a user opens something I built and goes \"wow.\"",
+                    ru: 'Я родился и вырос в Шавате, Хорезм. С 2022 года занимаюсь веб-разработкой — сначала фриланс, потом стартапы и международные клиенты.',
                   })}
                 </p>
                 <p>
                   {l({
-                    uz: "Bugunga qadar 50+ loyiha yetkazib berdim, hackathonlarda g'olib chiqdim va IT Park rezidentiga aylandim. Lekin eng katta yutuğim — o'rganishni hech qachon to'xtatmaslik.",
+                    uz: "Bugunga qadar 50+ loyiha yetkazib berdim, hackathonlarda g'olib chiqdim va IT Park rezidentiga aylandim. Lekin eng katta yutug'im — o'rganishni hech qachon to'xtatmaslik.",
                     en: "So far I've delivered 50+ projects, won hackathons and become an IT Park resident. But my biggest achievement is never stopping learning.",
-                    ru: 'Я сдал более 100 проектов, побеждал в хакатонах и стал резидентом IT Park.',
+                    ru: 'Я сдал более 50 проектов, побеждал в хакатонах и стал резидентом IT Park.',
                   })}
                 </p>
               </div>

@@ -32,9 +32,9 @@ export const Certificates: React.FC = () => {
                   </div>
                   <span className="font-mono text-xs text-muted-foreground">{cert.date}</span>
                 </div>
-                <h3 className="mt-6 font-display text-xl font-bold leading-snug transition-colors group-hover:text-primary">
+                <h2 className="mt-6 font-display text-xl font-bold leading-snug transition-colors group-hover:text-primary">
                   {cert.title}
-                </h3>
+                </h2>
                 <p className="mt-2 font-mono text-sm text-muted-foreground">{cert.issuer}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {cert.skills.slice(0, 3).map((skill) => (

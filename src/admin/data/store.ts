@@ -1,7 +1,7 @@
 import { defaultStats } from "@/portfolio/data/homePresentation";
-// Browser-local content store. Default content comes from portfolioData; admin
-// edits are saved in localStorage and override it. Swap for a Supabase-backed
-// repository later — the site and admin only talk to this module.
+// Content store used by the site and the admin. Default content comes from portfolioData; the published
+// database content (delivered with the server-rendered page, or fetched by remote.ts) overrides it.
+// In the browser localStorage is only a cache; in tests it is the whole store (REMOTE is off).
 import { useSyncExternalStore } from "react";
 import * as seed from "@/portfolio/data/portfolioData";
 import type { Message } from "@/portfolio/types";
@@ -12,8 +12,17 @@ export const isRemote = REMOTE;
 const remote = () => import("./remote");
 function reportError(e: unknown) {
   console.error("Content sync failed", e);
-  void import("sonner").then(({ toast }) => toast.error("Bazaga saqlab bo‘lmadi. Kirish huquqingizni tekshiring."));
+  const err = e as { code?: string; message?: string };
+  const denied = err?.code === "42501" || err?.code === "PGRST301" || /permission|jwt|row-level/i.test(err?.message ?? "");
+  const msg = denied
+    ? "Bazaga saqlab bo‘lmadi. Kirish huquqingizni tekshiring."
+    : `Bazaga saqlab bo‘lmadi${err?.message ? `: ${err.message}` : "."} O‘zgarishlar bekor qilindi.`;
+  void import("sonner").then(({ toast }) => toast.error(msg));
 }
+
+// Remote saves run one at a time, in order, so a slow older save can never land after a newer one.
+let saveQueue: Promise<void> = Promise.resolve();
+let pendingSaves = 0;
 
 export type Status = "published" | "draft";
 export type Meta = { _status?: Status; _updatedAt?: string };
@@ -65,10 +74,21 @@ const getDefaults = () => (defaults ??= buildDefaults());
 let current: Content | null = null;
 const listeners = new Set<() => void>();
 
+// Published content delivered with the server-rendered page (see hydrateContent): the base for both the
+// server snapshot and the first client render, so there is no seed -> database flash.
+let ssrBase: Content | null = null;
+let ssrRaw: unknown = null;
+export function hydrateContent(raw: Record<string, unknown> | undefined | null) {
+  if (!raw || raw === ssrRaw || !Object.keys(raw).length) return;
+  ssrRaw = raw;
+  ssrBase = { ...getDefaults(), ...(raw as Partial<Content>) };
+}
+const serverSnapshot = () => ssrBase ?? getDefaults();
+
 function load(): Content {
-  if (typeof window === "undefined") return getDefaults();
+  if (typeof window === "undefined") return serverSnapshot();
   if (current) return current;
-  const base = getDefaults();
+  const base = serverSnapshot();
   try {
     const raw = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
     current = raw ? { ...base, ...(JSON.parse(raw) as Partial<Content>) } : base;
@@ -84,20 +104,32 @@ function persist(next: Content) {
   (Object.keys(next) as (keyof Content)[]).forEach((k) => {
     if (next[k] !== base[k]) (diff as Record<string, unknown>)[k] = next[k];
   });
+  // In remote mode localStorage is only a cache: never store the inbox (personal data) in it,
+  // and a full/blocked storage must not stop the database save.
+  if (REMOTE) delete diff.messages;
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(diff));
   } catch {
-    throw new Error("storage-full");
+    if (!REMOTE) throw new Error("storage-full");
   }
   const prev = current ?? base;
   current = next;
   listeners.forEach((l) => l());
   if (REMOTE) {
     const changed = (Object.keys(next) as (keyof Content)[]).filter((k) => k !== "messages" && next[k] !== prev[k]);
-    void remote().then(async (r) => {
-      await r.saveKeys(changed.map((k) => [k, next[k]]));
-      if (next.messages !== prev.messages) await r.syncMessages(prev.messages as unknown as RemoteMessage[], next.messages as unknown as RemoteMessage[]);
-    }).catch(reportError);
+    pendingSaves++;
+    saveQueue = saveQueue.then(async () => {
+      try {
+        const r = await remote();
+        await r.saveKeys(changed.map((k) => [k, next[k]]));
+        if (next.messages !== prev.messages) await r.syncMessages(prev.messages as unknown as RemoteMessage[], next.messages as unknown as RemoteMessage[]);
+      } catch (e) {
+        reportError(e); // local state is now ahead of the database; the refresh below restores the truth
+      } finally {
+        pendingSaves--;
+        if (pendingSaves === 0) void refreshContent();
+      }
+    });
   }
 }
 
@@ -105,10 +137,14 @@ let syncing = false;
 /** Pull the latest content (and messages, for admins) from the database. */
 export async function refreshContent() {
   if (!REMOTE) return;
+  // A refresh while edits are still being saved would overwrite them with stale rows;
+  // the queue triggers one refresh when it drains.
+  if (pendingSaves > 0) return;
   try {
     const r = await remote();
     const [rows, msgs] = await Promise.all([r.fetchContent(), r.fetchMessages()]);
-    const next = { ...getDefaults(), ...(rows as Partial<Content>), messages: (msgs ?? []) as unknown as Message[] };
+    if (pendingSaves > 0) return;
+    const next = { ...getDefaults(), ...(rows as Partial<Content>), messages: (msgs ?? current?.messages ?? []) as unknown as Message[] }; // a failed inbox fetch must not look like an empty inbox
     current = next;
     try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(rows)); } catch { /* cache only */ }
     listeners.forEach((l) => l());
@@ -135,7 +171,7 @@ export const getContent = () => load();
 export const getDefaultContent = () => getDefaults();
 
 export function useContent(): Content {
-  return useSyncExternalStore(subscribe, load, getDefaults);
+  return useSyncExternalStore(subscribe, load, serverSnapshot);
 }
 
 export function setContent<K extends keyof Content>(key: K, value: Content[K]) {
@@ -155,7 +191,8 @@ export function importBackup(json: string) {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("invalid-backup");
   const parsed = value as Partial<Content>;
   if (!parsed.profile || typeof parsed.profile.name !== "string" || !parsed.settings || LIST_KEYS.some((key) => !Array.isArray(parsed[key]))) throw new Error("invalid-backup");
-  persist({ ...getDefaults(), ...parsed });
+  // Backups never carry the inbox; keep the current messages so an import cannot delete them.
+  persist({ ...getDefaults(), ...parsed, messages: load().messages });
 }
 export function resetAll() {
   if (REMOTE) { persist({ ...getDefaults(), messages: load().messages }); return; }
@@ -202,7 +239,15 @@ export function publishedItems<T>(arr: T[]): T[] {
   return arr.filter((x) => (x as Meta)._status !== "draft");
 }
 
-export async function addMessage(m: Omit<Message, "id" | "date" | "read">) {
-  if (REMOTE) { await (await remote()).insertMessage(m as never); return; }
-  setContent("messages", [{ ...m, id: crypto.randomUUID(), date: new Date().toISOString(), read: false }, ...load().messages]);
+export async function addMessage(m: Omit<Message, "id" | "date" | "read"> & { website?: string }) {
+  if (REMOTE) {
+    // Goes through a server function (rate limit + honeypot + validation) instead of a direct anon insert.
+    const { sendContactMessage } = await import("@/lib/contact.functions");
+    const res = await sendContactMessage({ data: m });
+    if (!res.ok) throw new Error(res.error);
+    return;
+  }
+  const { website: _website, ...m2 } = m;
+  if (_website) return;
+  setContent("messages", [{ ...m2, id: crypto.randomUUID(), date: new Date().toISOString(), read: false }, ...load().messages]);
 }

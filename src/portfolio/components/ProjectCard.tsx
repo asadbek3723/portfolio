@@ -4,13 +4,16 @@ import { ArrowUpRight } from 'lucide-react';
 import { Link } from '@/lib/router-compat';
 import type { Project } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import { responsiveImage } from '@/lib/responsive-image';
 
 interface ProjectCardProps {
   project: Project;
   index?: number;
+  headingLevel?: 2 | 3;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index = 0 }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index = 0, headingLevel = 3 }) => {
+  const Heading = headingLevel === 2 ? 'h2' : 'h3';
   const { l } = useLanguage();
   const reduced = useReducedMotion();
 
@@ -25,7 +28,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index = 0 }) 
       <Link to={`/projects/${project.slug}`} data-cursor="view" className="group block">
         <div className="relative overflow-hidden rounded-3xl border border-border">
           <img
-            src={project.cover}
+            {...responsiveImage(project.cover, '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw')}
             alt={l(project.title)}
             loading="lazy"
             width={1280}
@@ -39,9 +42,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index = 0 }) 
         </div>
         <div className="mt-5 flex items-start justify-between gap-4">
           <div>
-            <h3 className="font-display text-2xl font-bold transition-colors group-hover:text-primary">
+            <Heading className="font-display text-2xl font-bold transition-colors group-hover:text-primary">
               {l(project.title)}
-            </h3>
+            </Heading>
             <p className="mt-1 text-muted-foreground">{l(project.summary)}</p>
           </div>
           <span className="font-mono text-sm text-muted-foreground">{project.year}</span>

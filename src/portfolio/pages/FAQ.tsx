@@ -29,7 +29,11 @@ export const FAQ: React.FC = () => {
           {faqData.map((item, idx) => (
             <FadeIn key={item.id} delay={idx * 0.05}>
               <div>
+                <h2>
                 <button
+                  id={`faq-q-${item.id}`}
+                  aria-expanded={openIndex === idx}
+                  aria-controls={`faq-a-${item.id}`}
                   onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
                   className="flex w-full items-center justify-between gap-6 py-8 text-left cursor-pointer"
                 >
@@ -40,11 +44,16 @@ export const FAQ: React.FC = () => {
                     className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300 ${
                       openIndex === idx ? 'rotate-180 text-primary' : ''
                     }`}
+                    aria-hidden="true"
                   />
                 </button>
+                </h2>
                 <AnimatePresence initial={false}>
                   {openIndex === idx && (
                     <motion.div
+                      id={`faq-a-${item.id}`}
+                      role="region"
+                      aria-labelledby={`faq-q-${item.id}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import clsx from 'clsx';
+import { responsiveImage } from '@/lib/responsive-image';
 
 export const EASE_CUSTOM = [0.22, 1, 0.36, 1] as const;
 
@@ -21,7 +22,7 @@ export const TextReveal: React.FC<{
   delay?: number;
   as?: 'h1' | 'h2' | 'h3' | 'p' | 'span';
 }> = ({ text, className, delay = 0, as = 'h2' }) => {
-  const Component = motion[as] as any;
+  const Component = motion[as] as React.ElementType;
   return (
     <Component
       className={className}
@@ -129,8 +130,11 @@ export const ParallaxImage: React.FC<{
   return (
     <div ref={ref} className={clsx('relative overflow-hidden', className)}>
       <motion.img
-        src={src}
+        {...responsiveImage(src, '100vw')}
         alt={alt}
+        // The cover is the largest paint on detail pages: fetch it first and never lazy-load it.
+        fetchPriority="high"
+        decoding="async"
         style={{ y, scale: 1.18 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

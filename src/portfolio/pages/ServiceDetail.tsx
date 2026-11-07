@@ -41,7 +41,7 @@ export const ServiceDetail: React.FC = () => {
                 {String(i + 1).padStart(2, '0')}
               </span>
               <div>
-                <h4 className="font-display text-xl font-bold">{l(step.title)}</h4>
+                <h3 className="font-display text-xl font-bold">{l(step.title)}</h3>
                 <p className="mt-2 leading-relaxed text-muted-foreground">{l(step.text)}</p>
               </div>
             </div>

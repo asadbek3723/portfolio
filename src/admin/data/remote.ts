@@ -13,6 +13,8 @@ const client = async () => (await import("@/integrations/supabase/client")).supa
 const snapshots = new Map<string, Map<string, string>>();
 const remember = (table: string, rows: Row[]) => snapshots.set(table, new Map(rows.map((r) => [String(r["id"]), JSON.stringify(r)])));
 
+let seoLoaded = false;
+
 export async function fetchContent(): Promise<Record<string, unknown>> {
   const sb = await client();
   const out: Record<string, unknown> = {};
@@ -20,7 +22,9 @@ export async function fetchContent(): Promise<Record<string, unknown>> {
   for (const t of LIST_TABLES) {
     jobs.push((async () => {
       const { data, error } = await sb.from(t.table).select("*").order("position", { ascending: true });
-      if (error) throw error;
+      // Tables without a status flag (media, history) are admin-only: anonymous visitors are denied by RLS,
+      // which must not prevent the public collections from loading.
+      if (error) { if (!t.status) return; throw error; }
       const rows = (data ?? []) as Row[];
       remember(t.table, rows.map((r) => itemToRow(t, rowToItem(t, r), Number(r["position"] ?? 0))));
       out[t.key] = rows.map((r) => rowToItem(t, r));
@@ -37,6 +41,7 @@ export async function fetchContent(): Promise<Record<string, unknown>> {
     const { data, error } = await sb.from(SEO_TABLE).select("*");
     if (error) throw error;
     out["seo"] = rowsToSeo((data ?? []) as Row[]);
+    seoLoaded = true;
   })());
   await Promise.all(jobs);
   return out;
@@ -77,9 +82,12 @@ export async function saveKeys(entries: [string, unknown][]) {
       const { error } = await sb.from(single.table).upsert(singleToRow(single, value as Record<string, unknown>));
       if (error) throw error;
     } else if (key === "seo") {
+      // Never save SEO before it has been loaded once: an empty default would delete every stored row.
+      if (!seoLoaded) throw new Error("SEO entries are not loaded yet; reload and try again.");
       const rows = seoToRows(value as SeoMap);
       if (rows.length) { const { error } = await sb.from(SEO_TABLE).upsert(rows.map((r) => ({ ...r, updated_at: new Date().toISOString() }))); if (error) throw error; }
-      const { data } = await sb.from(SEO_TABLE).select("path");
+      const { data, error: listError } = await sb.from(SEO_TABLE).select("path");
+      if (listError) throw listError;
       const keep = new Set(rows.map((r) => r.path));
       const removed = ((data ?? []) as { path: string }[]).map((r) => r.path).filter((p) => !keep.has(p));
       if (removed.length) { const { error } = await sb.from(SEO_TABLE).delete().in("path", removed); if (error) throw error; }

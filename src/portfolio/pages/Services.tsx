@@ -47,9 +47,9 @@ export const Services: React.FC = () => {
                       {l(service.tagline)}
                     </p>
                   )}
-                  <h3 className="relative mt-2 font-display text-xl font-bold transition-colors group-hover:text-primary md:text-3xl">
+                  <h2 className="relative mt-2 font-display text-xl font-bold transition-colors group-hover:text-primary md:text-3xl">
                     {l(service.title)}
-                  </h3>
+                  </h2>
                   <p className="relative mt-3 flex-1 leading-relaxed text-muted-foreground">
                     {l(service.description)}
                   </p>

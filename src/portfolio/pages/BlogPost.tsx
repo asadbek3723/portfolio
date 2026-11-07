@@ -1,6 +1,7 @@
 import { useSiteData } from '@/admin/data/store';
 import React from 'react';
-import { useParams, Link, Navigate } from '@/lib/router-compat';
+import { useParams, Link } from '@/lib/router-compat';
+import { NotFoundView } from '../components/NotFoundView';
 import { ArrowLeft, Clock } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { Section } from '../components/Section';
@@ -14,7 +15,7 @@ export const BlogPost: React.FC = () => {
   const post = blogData.find((p) => p.slug === slug);
 
   if (!post) {
-    return <Navigate to="/blog" replace />;
+    return <NotFoundView backTo="/blog" backLabel={l({ uz: 'Blogga qaytish', en: 'Back to blog', ru: 'Назад к блогу' })} />;
   }
 
   const paragraphs = l(post.body).split('\n\n');

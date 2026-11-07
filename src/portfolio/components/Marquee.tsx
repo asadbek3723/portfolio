@@ -9,7 +9,8 @@ export const Marquee: React.FC<MarqueeProps> = ({ items }) => {
 
   return (
     <div className="relative overflow-hidden py-6 md:py-12 border-y border-border">
-      <div className="animate-marquee flex w-max gap-12">
+      <p className="sr-only">{items.join(', ')}</p>
+      <div aria-hidden="true" className="animate-marquee flex w-max gap-12">
         {repeated.map((item, idx) => (
           <span
             key={idx}

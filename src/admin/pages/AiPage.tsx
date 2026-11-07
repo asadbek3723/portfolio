@@ -18,7 +18,7 @@ type Change = Meta & { id: string; after: Loc; on: boolean };
 const ERR: Record<string, string> = {
   busy: "AI hozir band. Bir daqiqadan so'ng qayta urinib ko'ring.",
   credits: "AI kreditlari tugagan.",
-  unavailable: "AI ulanmagan. Serverga LOVABLE_API_KEY yoki OPENAI_API_KEY qo'shing.",
+  unavailable: "AI ulanmagan. Serverga GROQ_API_KEYS (yoki LOVABLE_API_KEY / OPENAI_API_KEY) qo'shing.",
   unauthorized: "Qayta kiring: admin sessiyasi topilmadi.",
   forbidden: "Bu amal faqat admin uchun.",
 };

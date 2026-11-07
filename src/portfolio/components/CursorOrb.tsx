@@ -46,7 +46,7 @@ export const CursorOrb: React.FC = () => {
     <>
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none fixed left-0 top-0 z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orb opacity-20 blur-3xl md:block"
+        className="pointer-events-none fixed left-0 top-0 z-0 hidden h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orb opacity-20 will-change-transform md:block"
         style={{ x: orbX, y: orbY }}
       />
       <motion.div

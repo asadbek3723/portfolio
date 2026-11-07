@@ -9,6 +9,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { PageHeader } from '../components/PageHeader';
 import { Section } from '../components/Section';
 import type { Localized } from '../types';
+import { responsiveImage } from '@/lib/responsive-image';
 
 const T = {
   title: { uz: 'Loyihangizga mos yechim', en: 'Find the right fit', ru: 'Подберём решение' },
@@ -162,7 +163,8 @@ export const Match: React.FC = () => {
                 <h2 className="mb-6 font-display text-2xl font-extrabold md:text-4xl">{l(T.services)}</h2>
                 <div className="grid gap-4 md:grid-cols-2">
                   {result.services.map((m) => {
-                    const s = servicesData.find((x) => x.slug === m.slug)!;
+                    const s = servicesData.find((x) => x.slug === m.slug);
+                    if (!s) return null;
                     return (
                       <Link key={m.slug} to={`/services/${m.slug}`} className="glass group rounded-3xl p-6 transition-colors hover:border-primary">
                         <div className="flex items-start justify-between gap-4">
@@ -181,10 +183,11 @@ export const Match: React.FC = () => {
                 <h2 className="mb-6 font-display text-2xl font-extrabold md:text-4xl">{l(T.projects)}</h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {result.projects.map((m) => {
-                    const p = projectsData.find((x) => x.slug === m.slug)!;
+                    const p = projectsData.find((x) => x.slug === m.slug);
+                    if (!p) return null;
                     return (
                       <Link key={m.slug} to={`/projects/${m.slug}`} className="glass group overflow-hidden rounded-3xl transition-colors hover:border-primary">
-                        <img src={p.cover} alt={l(p.title)} loading="lazy" className="aspect-[16/10] w-full object-cover" />
+                        <img {...responsiveImage(p.cover, '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw')} alt={l(p.title)} loading="lazy" className="aspect-[16/10] w-full object-cover" />
                         <div className="p-5">
                           <h3 className="font-display text-lg font-bold group-hover:text-primary">{l(p.title)}</h3>
                           <p className="mt-2 text-sm text-muted-foreground">{m.reason}</p>
@@ -200,7 +203,8 @@ export const Match: React.FC = () => {
                 <h2 className="mb-6 font-display text-2xl font-extrabold md:text-4xl">{l(T.posts)}</h2>
                 <div className="grid gap-4 md:grid-cols-2">
                   {result.posts.map((m) => {
-                    const b = blogData.find((x) => x.slug === m.slug)!;
+                    const b = blogData.find((x) => x.slug === m.slug);
+                    if (!b) return null;
                     return (
                       <Link key={m.slug} to={`/blog/${m.slug}`} className="glass group rounded-3xl p-6 transition-colors hover:border-primary">
                         <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">

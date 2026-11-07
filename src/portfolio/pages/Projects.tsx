@@ -16,7 +16,7 @@ export const Projects: React.FC = () => {
       <Section>
         <div className="grid gap-6 md:gap-8 md:grid-cols-2">
           {projectsData.map((project, idx) => (
-            <ProjectCard key={project.id} project={project} index={idx} />
+            <ProjectCard key={project.id} project={project} index={idx} headingLevel={2} />
           ))}
         </div>
         <MatchCta text={{ uz: "Sizning loyihangizga qaysi ishim o'xshashligini AI aniqlab bersin.", en: 'Let AI find which of my projects is closest to yours.', ru: 'Пусть AI найдёт проект, похожий на ваш.' }} />

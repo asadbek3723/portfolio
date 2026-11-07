@@ -5,21 +5,31 @@ import { useLanguage } from '../context/LanguageContext';
 import { PageHeader } from '../components/PageHeader';
 import { Section } from '../components/Section';
 import { Link } from '@/lib/router-compat';
+import { safeUrl } from '@/lib/safe-url';
 
 export const Contact: React.FC = () => {
   const { profileData } = useSiteData();
   const { t, l } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
     const form = e.currentTarget;
     const fd = new FormData(form);
     try {
-      await addMessage({ name: String(fd.get('name') ?? ''), email: String(fd.get('email') ?? ''), subject: String(fd.get('subject') ?? ''), body: String(fd.get('body') ?? '') });
-    } catch { setLoading(false); alert('Xabar yuborilmadi. Qayta urinib ko‘ring.'); return; }
+      await addMessage({ name: String(fd.get('name') ?? ''), email: String(fd.get('email') ?? ''), subject: String(fd.get('subject') ?? ''), body: String(fd.get('body') ?? ''), website: String(fd.get('website') ?? '') });
+    } catch (err) {
+      setLoading(false);
+      const busy = err instanceof Error && err.message === 'busy';
+      setError(busy
+        ? l({ uz: 'Juda ko‘p urinish. Birozdan so‘ng qayta urinib ko‘ring.', en: 'Too many attempts. Please try again in a few minutes.', ru: 'Слишком много попыток. Повторите через несколько минут.' })
+        : l({ uz: 'Xabar yuborilmadi. Qayta urinib ko‘ring.', en: 'Message not sent. Please try again.', ru: 'Сообщение не отправлено. Попробуйте ещё раз.' }));
+      return;
+    }
     setLoading(false);
     setSubmitted(true);
     form.reset();
@@ -64,9 +74,9 @@ export const Contact: React.FC = () => {
               {profileData.socials.map((social) => (
                 <a
                   key={social.label}
-                  href={social.url}
+                  href={safeUrl(social.url)}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="block font-mono text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {social.label} ↗
@@ -77,8 +87,9 @@ export const Contact: React.FC = () => {
 
           {/* Contact form */}
           <div className="min-w-0">
+            {error && <p role="alert" className="mb-6 rounded-2xl border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive">{error}</p>}
             {submitted && (
-              <div className="mb-6 flex items-center gap-3 rounded-2xl border border-primary/40 bg-primary/10 p-4 text-primary font-mono text-sm">
+              <div role="status" className="mb-6 flex items-center gap-3 rounded-2xl border border-primary/40 bg-primary/10 p-4 text-primary font-mono text-sm">
                 <Check className="h-5 w-5" />
                 <span>
                   {l({
@@ -91,9 +102,13 @@ export const Contact: React.FC = () => {
             )}
 
             <form className="space-y-4" onSubmit={handleSubmit}>
+              <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <input
                 name="name"
                 required
+                maxLength={200}
+                autoComplete="name"
+                aria-label={l({ uz: 'Ismingiz', en: 'Name', ru: 'Ваше имя' })}
                 placeholder={l({ uz: 'Ismingiz', en: 'Name', ru: 'Ваше имя' })}
                 className={inputClass}
               />
@@ -101,17 +116,24 @@ export const Contact: React.FC = () => {
                 name="email"
                 type="email"
                 required
+                maxLength={320}
+                autoComplete="email"
+                aria-label="Email"
                 placeholder={l({ uz: 'Email manzilingiz', en: 'Email', ru: 'Email' })}
                 className={inputClass}
               />
               <input
                 name="subject"
+                maxLength={300}
+                aria-label={l({ uz: 'Mavzu', en: 'Subject', ru: 'Тема' })}
                 placeholder={l({ uz: 'Mavzu', en: 'Subject', ru: 'Тема' })}
                 className={inputClass}
               />
               <textarea
                 name="body"
                 required
+                maxLength={5000}
+                aria-label={l({ uz: 'Xabar matni', en: 'Message', ru: 'Сообщение' })}
                 rows={6}
                 placeholder={l({ uz: 'Xabar matni', en: 'Message', ru: 'Сообщение' })}
                 className={inputClass}

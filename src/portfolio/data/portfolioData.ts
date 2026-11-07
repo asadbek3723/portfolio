@@ -2357,7 +2357,7 @@ export const certificatesData: Certificate[] = [
     "skills": ["React", "JavaScript", "UX", "Git"],
     "credentialId": "META-FE-8842",
     "hours": 120,
-    "verifyUrl": "https://example.com/verify",
+    "verifyUrl": "",
     "image": "/assets/project-2-BH0LItVn.jpg",
     "detail": {
       "slug": "meta-front-end-developer",
@@ -2366,7 +2366,7 @@ export const certificatesData: Certificate[] = [
       "skills": ["React", "JavaScript", "UX", "Git"],
       "description": { "uz": "Meta tomonidan 9 kursdan iborat professional dastur.", "en": "A nine-course professional programme by Meta.", "ru": "Профессиональная программа Meta из 9 курсов." },
       "image": "/assets/project-2-BH0LItVn.jpg",
-      "verifyUrl": "https://example.com/verify"
+      "verifyUrl": ""
     }
   },
   {
@@ -2378,7 +2378,7 @@ export const certificatesData: Certificate[] = [
     "skills": ["JavaScript", "Algorithms", "Data structures"],
     "credentialId": "FCC-JS-2291",
     "hours": 300,
-    "verifyUrl": "https://example.com/verify",
+    "verifyUrl": "",
     "image": "/assets/project-2-BH0LItVn.jpg",
     "detail": {
       "slug": "javascript-algorithms",
@@ -2387,7 +2387,7 @@ export const certificatesData: Certificate[] = [
       "skills": ["JavaScript", "Algorithms", "Data structures"],
       "description": { "uz": "Algoritmlar va ma'lumotlar tuzilmalari.", "en": "Algorithms and data structures.", "ru": "Алгоритмы и структуры данных." },
       "image": "/assets/project-2-BH0LItVn.jpg",
-      "verifyUrl": "https://example.com/verify"
+      "verifyUrl": ""
     }
   },
   {
@@ -2399,7 +2399,7 @@ export const certificatesData: Certificate[] = [
     "skills": ["AWS", "Cloud", "Security"],
     "credentialId": "AWS-CP-55120",
     "hours": 40,
-    "verifyUrl": "https://example.com/verify",
+    "verifyUrl": "",
     "image": "/assets/project-2-BH0LItVn.jpg",
     "detail": {
       "slug": "aws-cloud-practitioner",
@@ -2408,7 +2408,7 @@ export const certificatesData: Certificate[] = [
       "skills": ["AWS", "Cloud", "Security"],
       "description": { "uz": "AWS bulut asoslari.", "en": "AWS cloud fundamentals.", "ru": "Основы облака AWS." },
       "image": "/assets/project-2-BH0LItVn.jpg",
-      "verifyUrl": "https://example.com/verify"
+      "verifyUrl": ""
     }
   },
   {
@@ -2420,7 +2420,7 @@ export const certificatesData: Certificate[] = [
     "skills": ["English"],
     "credentialId": "IELTS-75-001",
     "hours": 0,
-    "verifyUrl": "https://example.com/verify",
+    "verifyUrl": "",
     "image": "/assets/project-2-BH0LItVn.jpg",
     "detail": {
       "slug": "ielts",
@@ -2429,7 +2429,7 @@ export const certificatesData: Certificate[] = [
       "skills": ["English"],
       "description": { "uz": "Ingliz tili — 7.5 ball.", "en": "English proficiency — band 7.5.", "ru": "Английский — 7.5 баллов." },
       "image": "/assets/project-2-BH0LItVn.jpg",
-      "verifyUrl": "https://example.com/verify"
+      "verifyUrl": ""
     }
   },
   {
@@ -2441,7 +2441,7 @@ export const certificatesData: Certificate[] = [
     "skills": ["React", "Redux", "Hooks"],
     "credentialId": "UC-REACT-7734",
     "hours": 68,
-    "verifyUrl": "https://example.com/verify",
+    "verifyUrl": "",
     "image": "/assets/project-2-BH0LItVn.jpg",
     "detail": {
       "slug": "react-complete-guide",
@@ -2450,7 +2450,7 @@ export const certificatesData: Certificate[] = [
       "skills": ["React", "Redux", "Hooks"],
       "description": { "uz": "React bo'yicha to'liq kurs.", "en": "A complete React course.", "ru": "Полный курс по React." },
       "image": "/assets/project-2-BH0LItVn.jpg",
-      "verifyUrl": "https://example.com/verify"
+      "verifyUrl": ""
     }
   },
   {
@@ -2462,7 +2462,7 @@ export const certificatesData: Certificate[] = [
     "skills": ["Figma", "UI", "UX research"],
     "credentialId": "CALARTS-UX-410",
     "hours": 80,
-    "verifyUrl": "https://example.com/verify",
+    "verifyUrl": "",
     "image": "/assets/project-2-BH0LItVn.jpg",
     "detail": {
       "slug": "ui-ux-design",
@@ -2471,7 +2471,7 @@ export const certificatesData: Certificate[] = [
       "skills": ["Figma", "UI", "UX research"],
       "description": { "uz": "UI/UX dizayn mutaxassisligi.", "en": "UI/UX design specialisation.", "ru": "Специализация UI/UX." },
       "image": "/assets/project-2-BH0LItVn.jpg",
-      "verifyUrl": "https://example.com/verify"
+      "verifyUrl": ""
     }
   }
 ];
@@ -2632,56 +2632,7 @@ export const galleryData: GalleryItem[] = [
 
 export const blogData: BlogPost[] = [
   ...latestBlogPosts,
-  ...myBlogPosts,
-  {
-    "id": "1",
-    "slug": "motion-that-matters",
-    "date": "2026-08-12",
-    "readMin": 6,
-    "tags": [
-      "Frontend",
-      "Motion"
-    ],
-    "title": {
-      "uz": "Ma'noli animatsiya",
-      "en": "Motion that matters",
-      "ru": "Анимация со смыслом"
-    },
-    "excerpt": {
-      "uz": "Qachon animatsiya foyda, qachon zarar keltiradi.",
-      "en": "When motion helps and when it hurts.",
-      "ru": "Когда анимация помогает, а когда мешает."
-    },
-    "body": {
-      "uz": "Animatsiya foydalanuvchiga yo'l ko'rsatishi kerak...",
-      "en": "Motion should guide the user, not distract them...",
-      "ru": "Анимация должна направлять пользователя..."
-    }
-  },
-  {
-    "id": "2",
-    "slug": "fullstack-in-2026",
-    "date": "2026-05-03",
-    "readMin": 8,
-    "tags": [
-      "Career"
-    ],
-    "title": {
-      "uz": "2026-yilda fullstack",
-      "en": "Fullstack in 2026",
-      "ru": "Fullstack в 2026"
-    },
-    "excerpt": {
-      "uz": "Qaysi texnologiyalarni o'rganish kerak.",
-      "en": "Which tools are worth learning.",
-      "ru": "Что стоит изучать."
-    },
-    "body": {
-      "uz": "Bugungi kunda fullstack dasturchi...",
-      "en": "Today a fullstack developer...",
-      "ru": "Сегодня fullstack разработчик..."
-    }
-  }
+  ...myBlogPosts
 ];
 
 export const testimonialsData: Testimonial[] = [];

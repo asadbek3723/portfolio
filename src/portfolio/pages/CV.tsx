@@ -6,6 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { PageHeader } from '../components/PageHeader';
 import { Section } from '../components/Section';
 import { FadeIn } from '../components/FadeIn';
+import { safeUrl } from '@/lib/safe-url';
 
 export const CV: React.FC = () => {
   const { profileData, timelineData, skillsData } = useSiteData();
@@ -41,7 +42,7 @@ export const CV: React.FC = () => {
             </div>
 
             <a
-              href={profileData.cvUrl}
+              href={safeUrl(profileData.cvUrl)}
               download
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-7 py-4 font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-105"
             >
@@ -53,9 +54,9 @@ export const CV: React.FC = () => {
 
         {/* Experience */}
         <FadeIn delay={0.1}>
-          <h3 className="mb-8 mt-16 font-mono text-sm uppercase tracking-[0.3em] text-primary">
+          <h2 className="mb-8 mt-16 font-mono text-sm uppercase tracking-[0.3em] text-primary">
             {l({ uz: 'Tajriba', en: 'Experience', ru: 'Опыт' })}
-          </h3>
+          </h2>
           <div className="space-y-8 border-l border-border pl-8">
             {timelineData.map((item) => (
               <div key={item.id} className="relative">
@@ -74,9 +75,9 @@ export const CV: React.FC = () => {
 
         {/* Technologies */}
         <FadeIn delay={0.15}>
-          <h3 className="mb-6 mt-16 font-mono text-sm uppercase tracking-[0.3em] text-primary">
+          <h2 className="mb-6 mt-16 font-mono text-sm uppercase tracking-[0.3em] text-primary">
             {l({ uz: 'Texnologiyalar', en: 'Technologies', ru: 'Технологии' })}
-          </h3>
+          </h2>
           <div className="flex flex-wrap gap-3">
             {skillsData.map((skill) => (
               <span

@@ -6,4 +6,4 @@
 
 # Connection readiness
 - [x] Admin routes, editors and system screens implemented with local content tests.
-- [ ] Real authentication and shared storage: awaiting requested backend connection; current scope is frontend only.
+- [x] Real authentication and shared storage: Supabase (own project), see `supabase/migrations` and `AGENTS.md`.

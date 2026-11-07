@@ -15,6 +15,9 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+# Environment files: only .env (public keys) and .env.example are tracked
+.env.*
+!.env.example
 
 # Wrangler / Cloudflare
 .wrangler/

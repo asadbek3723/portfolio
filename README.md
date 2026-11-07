@@ -30,7 +30,13 @@ ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='...' bun run db:admin   # create the
 | `bun run dev` | Development server |
 | `bun run build` | Production build |
 | `bun run test` | Unit tests (Vitest) |
+| `bun run lint` | ESLint over `src` and `scripts` |
+| `bun run typecheck` | TypeScript check (`tsc --noEmit`) |
+| `bun run format` | Prettier |
+| `bun run db:migrate` | Apply `supabase/migrations` (needs `SUPABASE_DB_URL` in `.env.local`) |
+| `bun run db:seed` | Seed content tables from `portfolioData` |
+| `bun run db:admin` | Create/update the admin account (`ADMIN_EMAIL`, `ADMIN_PASSWORD`, 12+ chars) |
 
 ## Deploy (Vercel)
 `vercel.json` builds with the Vercel preset (`NITRO_PRESET=vercel`). Set `VITE_SUPABASE_URL` and
-`VITE_SUPABASE_PUBLISHABLE_KEY` (already in `.env`) and, for the admin AI page, `OPENAI_API_KEY`.
+`VITE_SUPABASE_PUBLISHABLE_KEY` (already in `.env`) and, for AI features (admin translation and the public `/match` page), `LOVABLE_API_KEY` (AI Gateway) or, for translation only, `OPENAI_API_KEY`. The contact form saves through a server function, so `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` must also be set on the server.

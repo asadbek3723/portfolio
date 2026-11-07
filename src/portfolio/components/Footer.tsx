@@ -4,6 +4,7 @@ import { Link } from '@/lib/router-compat';
 import { ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import type { TranslationKey } from '../data/translations';
+import { safeUrl } from '@/lib/safe-url';
 
 const ALL_LINKS: TranslationKey[] = [
   'home',
@@ -91,14 +92,14 @@ className="group mt-4 inline-flex max-w-full items-center gap-3 font-display tex
         </div>
 
         <div className="flex flex-col gap-4 border-t border-border py-6 text-sm text-muted-foreground md:flex-row md:flex-wrap md:items-center md:justify-between md:py-8">
-          <span>© 2026 {profileData.name}</span>
+          <span>© {new Date().getFullYear()} {profileData.name}</span>
           <div className="flex flex-wrap gap-x-5 gap-y-2 md:gap-6">
             {profileData.socials.map((social) => (
               <a
                 key={social.label}
-                href={social.url}
+                href={safeUrl(social.url)}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="hover:text-primary transition-colors"
               >
                 {social.label}

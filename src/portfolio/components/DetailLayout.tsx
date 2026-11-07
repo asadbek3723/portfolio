@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDialogA11y } from '../hooks/useDialogA11y';
 import { Link } from '@/lib/router-compat';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
@@ -7,6 +8,8 @@ import { useLanguage } from '../context/LanguageContext';
 import type { Localized, MediaItem, ProjectMetric } from '../types';
 import { Counter } from './Counter';
 import { staggerVariants, EASE_CUSTOM, TextReveal, ParallaxImage, MagneticButton } from './Primitives';
+import { safeUrl } from '@/lib/safe-url';
+import { responsiveImage } from '@/lib/responsive-image';
 
 // ─── Section Nav ──────────────────────────────────────────────────────────────
 
@@ -20,6 +23,8 @@ const SectionNav: React.FC<{ sections: SectionDef[] }> = ({ sections }) => {
   const { l } = useLanguage();
   const [activeId, setActiveId] = useState(sections[0]?.id);
 
+  // Re-subscribe only when the set of section ids changes, not on every render of the parent.
+  const idsKey = sections.map((s) => s.id).join('|');
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
@@ -29,15 +34,17 @@ const SectionNav: React.FC<{ sections: SectionDef[] }> = ({ sections }) => {
       },
       { rootMargin: '-40% 0px -55% 0px' }
     );
-    sections.forEach((s) => {
-      const el = document.getElementById(s.id);
+    idsKey.split('|').forEach((id) => {
+      const el = document.getElementById(id);
       if (el) obs.observe(el);
     });
     return () => obs.disconnect();
-  }, [sections]);
+  }, [idsKey]);
 
-  const NavItem = ({ sec }: { sec: SectionDef }) => (
+  // A render helper, not a component: a component defined here would remount on every update.
+  const renderNavItem = (sec: SectionDef) => (
     <a
+      key={sec.id}
       href={`#${sec.id}`}
       className={cn(
         'group flex items-center gap-3 whitespace-nowrap font-mono text-xs uppercase tracking-widest transition-colors',
@@ -61,14 +68,14 @@ const SectionNav: React.FC<{ sections: SectionDef[] }> = ({ sections }) => {
         aria-label="Sections"
         className="sticky top-28 hidden flex-col gap-5 self-start lg:flex"
       >
-        {sections.map((s) => <NavItem key={s.id} sec={s} />)}
+        {sections.map(renderNavItem)}
       </nav>
       {/* Mobile horizontal scroll */}
       <nav
         aria-label="Sections"
         className="glass sticky top-20 z-30 -mx-6 flex gap-6 overflow-x-auto px-6 py-4 md:-mx-12 md:px-12 lg:hidden [scrollbar-width:none]"
       >
-        {sections.map((s) => <NavItem key={s.id} sec={s} />)}
+        {sections.map(renderNavItem)}
       </nav>
     </>
   );
@@ -138,13 +145,8 @@ export const BulletList: React.FC<{ items: Localized[]; numbered?: boolean }> = 
 const MediaGallery: React.FC<{ media: MediaItem[]; title: string }> = ({ media, title }) => {
   const [active, setActive] = useState<number | null>(null);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setActive(null);
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, []);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(active !== null && !!media[active], () => setActive(null), dialogRef);
 
   return (
     <>
@@ -153,6 +155,7 @@ const MediaGallery: React.FC<{ media: MediaItem[]; title: string }> = ({ media, 
           <button
             key={i}
             onClick={() => setActive(i)}
+            aria-label={`${title} — ${i + 1} / ${media.length}`}
             className="group relative overflow-hidden rounded-2xl border border-border cursor-pointer"
           >
             {item.type === 'video' ? (
@@ -166,8 +169,8 @@ const MediaGallery: React.FC<{ media: MediaItem[]; title: string }> = ({ media, 
               />
             ) : (
               <img
-                src={item.src}
-                alt={title}
+                {...responsiveImage(item.src, '(min-width: 640px) 50vw, 100vw')}
+                alt=""
                 loading="lazy"
                 className="aspect-video w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -179,6 +182,10 @@ const MediaGallery: React.FC<{ media: MediaItem[]; title: string }> = ({ media, 
       <AnimatePresence>
         {active !== null && media[active] && (
           <motion.div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -203,7 +210,7 @@ const MediaGallery: React.FC<{ media: MediaItem[]; title: string }> = ({ media, 
                 />
               ) : (
                 <img
-                  src={media[active].src}
+                  {...responsiveImage(media[active].src, '(min-width: 896px) 896px, 100vw')}
                   alt={title}
                   className="max-h-[80vh] w-full rounded-2xl border border-border object-contain"
                 />
@@ -256,7 +263,7 @@ export const ActionButton: React.FC<{
   return (
     <MagneticButton>
       {external ? (
-        <a href={href} target="_blank" rel="noreferrer" className={cls}>
+        <a href={safeUrl(href)} target="_blank" rel="noopener noreferrer" className={cls}>
           {children}
           <ArrowUpRight className="h-4 w-4" />
         </a>
@@ -430,9 +437,9 @@ export const DetailLayout: React.FC<DetailLayoutProps> = ({
         <div className="min-w-0 space-y-24 md:space-y-32">
           {sections.map((sec, i) => (
             <section key={sec.id} id={sec.id} className="scroll-mt-40">
-              <p className="mb-4 font-mono text-xs uppercase tracking-[0.3em] text-primary">
+              <h2 className="mb-4 font-mono text-xs font-normal uppercase tracking-[0.3em] text-primary">
                 {String(i + 1).padStart(2, '0')} / {l(sec.label)}
-              </p>
+              </h2>
               {sec.content}
             </section>
           ))}

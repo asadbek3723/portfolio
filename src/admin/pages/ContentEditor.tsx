@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "@/lib/router-compat";
+import { safeUrl } from "@/lib/safe-url";
 import { blankItem, profileFields, type CollectionConfig, type Field } from "../collections";
 import { repo, type AnyItem } from "../data/repository";
 import { getContent, logHistory, setContent } from "../data/store";
@@ -28,11 +29,13 @@ export function ContentEditor({ cfg, id }: { cfg?: CollectionConfig; id?: string
   const save = async () => {
     const missing = fields.find((f) => {
       if (f.optional) return false;
-      if (f.type === "text") return !String(value[f.key] ?? "").trim();
+      if (f.type === "text" || f.type === "textarea" || f.type === "image" || f.type === "date" || f.type === "select" || f.type === "email") return !String(value[f.key] ?? "").trim();
       if (f.type === "localized") { const r = completeness(value[f.key]); return r.uz + r.en + r.ru === 0; }
       return false;
     });
     if (missing) { toast.error(`${missing.label} maydonini to'ldiring`); return; }
+    const badUrl = fields.find((f) => f.type === "url" && String(value[f.key] ?? "").trim() && safeUrl(String(value[f.key])) === "#" && !String(value[f.key]).trim().startsWith("#"));
+    if (badUrl) { toast.error(`${badUrl.label}: faqat http(s), mailto yoki tel havolalari ruxsat etiladi`); return; }
     if (cfg && "slug" in value) {
       const slug = String(value["slug"] ?? "");
       if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) { toast.error("Slug: kichik lotin harflari, raqam va tire ishlating"); return; }

@@ -17,8 +17,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link
   { to, ...rest },
   ref,
 ) {
-  if (/^(https?:|mailto:|tel:)/.test(to)) {
-    return <a ref={ref} href={to} {...rest} />;
+  // Anything that is not an in-app path (other schemes, protocol-relative URLs, #hash, ?query) is a plain anchor.
+  if (/^([a-z][a-z0-9+.-]*:|\/\/|#|\?)/i.test(to)) {
+    const external = /^(https?:)?\/\//i.test(to);
+    const rel = rest.target === "_blank" || external ? [rest.rel, "noopener", "noreferrer"].filter(Boolean).join(" ") : rest.rel;
+    return <a ref={ref} href={to} {...rest} {...(rel ? { rel } : {})} />;
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return <TsLink ref={ref} to={to as any} {...(rest as any)} />;
