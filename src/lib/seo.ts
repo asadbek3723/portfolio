@@ -42,7 +42,7 @@ interface HeadInput {
   published?: string;
   tags?: string[];
   jsonLd?: Json[];
-  noindex?: boolean;
+  noindex?: boolean | undefined;
 }
 
 export function buildHead(i: HeadInput) {
@@ -80,7 +80,7 @@ export function buildHead(i: HeadInput) {
     if (published) meta.push({ property: "article:published_time", content: published });
     for (const tag of i.tags ?? []) meta.push({ property: "article:tag", content: tag });
   }
-  const scripts = (i.jsonLd?.length ? [{ type: "application/ld+json", children: jsonForScript({ "@context": "https://schema.org", "@graph": i.jsonLd }) }] : []) as { type: string; children: string }[];
+  const scripts = (i.jsonLd?.length && !i.noindex ? [{ type: "application/ld+json", children: jsonForScript({ "@context": "https://schema.org", "@graph": i.jsonLd }) }] : []) as { type: string; children: string }[];
   return { meta, links: [{ rel: "canonical", href: url }], scripts };
 }
 
@@ -114,7 +114,7 @@ function person(seo: SeoContent): Json {
     image: personImages(seo),
     sameAs: p.socials.map((x) => x.url).filter((u) => /^https?:\/\//.test(u)),
     worksFor: { "@type": "Organization", name: COMPANY.name },
-    hasOccupation: seo.timeline.map((x) => ({ "@type": "Occupation", name: t(x.title), description: clip(clean(t(x.description)), 300), occupationLocation: { "@type": "Place", name: x.place } })),
+    hasOccupation: seo.timeline.filter((x) => !x.noindex).map((x) => ({ "@type": "Occupation", name: t(x.title), description: clip(clean(t(x.description)), 300), occupationLocation: { "@type": "Place", name: x.place } })),
     address: { "@type": "PostalAddress", addressLocality: "Shovot", addressRegion: "Xorazm", addressCountry: "UZ" },
     homeLocation: { "@type": "Place", name: "Shovot, Khorezm, Uzbekistan" },
     nationality: { "@type": "Country", name: "Uzbekistan" },
@@ -128,7 +128,7 @@ function person(seo: SeoContent): Json {
 }
 
 /** Projects as CreativeWorks made by the person, for the home and about pages. */
-const projectWorks = (seo: SeoContent): Json[] => seo.projects.map((x) => ({ "@type": "CreativeWork", "@id": `${abs(`/projects/${x.slug}`)}#project`, name: t(x.title), description: clip(clean(t(x.summary)), 300), url: abs(`/projects/${x.slug}`), image: abs(x.cover), creator: { "@id": personId }, keywords: x.stack.join(", "), ...(x.year ? { dateCreated: String(x.year) } : {}) }));
+const projectWorks = (seo: SeoContent): Json[] => seo.projects.filter((x) => !x.noindex).map((x) => ({ "@type": "CreativeWork", "@id": `${abs(`/projects/${x.slug}`)}#project`, name: t(x.title), description: clip(clean(t(x.summary)), 300), url: abs(`/projects/${x.slug}`), image: abs(x.cover), creator: { "@id": personId }, keywords: x.stack.join(", "), ...(x.year ? { dateCreated: String(x.year) } : {}) }));
 const website = (): Json => ({ "@type": "WebSite", "@id": websiteId, url: SITE_URL, name: `${SITE_NAME} — ${JOB_TITLE}`, inLanguage: ["uz", "en", "ru"], publisher: { "@id": personId } });
 const webpage = (path: string, name: string, description: string, type = "WebPage", extra: Json = {}): Json => ({ "@type": type, "@id": `${abs(path)}#webpage`, url: abs(path), name, description: clip(clean(description), 300), isPartOf: { "@id": websiteId }, about: { "@id": personId }, inLanguage: "uz", ...extra });
 const crumbs = (items: [string, string][]): Json => ({ "@type": "BreadcrumbList", itemListElement: items.map(([name, path], idx) => ({ "@type": "ListItem", position: idx + 1, name, item: abs(path) })) });
@@ -151,13 +151,13 @@ const PAGES: Record<string, Page> = {
   },
   "/projects": {
     title: `Loyihalar — ${TAIL} | Veb-platformalar va ilovalar`,
-    description: `${SITE_NAME} yaratgan haqiqiy loyihalar: UZEX AI, Mazzy Express, IELTS Imperia, House Mobile, Döner Food. React, Next.js, Electron va Supabase asosidagi veb-platformalar.`,
-    ld: (seo, p) => [webpage(p, "Loyihalar", "Loyihalar ro'yxati", "CollectionPage"), itemList(seo.projects.map((x) => ({ name: t(x.title), path: `/projects/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Loyihalar", p]])],
+    description: `${SITE_NAME} yaratgan haqiqiy loyihalar: UZEX AI, IELTS Imperia, House Mobile, Döner Food. React, Next.js, Electron va Supabase asosidagi veb-platformalar.`,
+    ld: (seo, p) => [webpage(p, "Loyihalar", "Loyihalar ro'yxati", "CollectionPage"), itemList(seo.projects.filter((x) => !x.noindex).map((x) => ({ name: t(x.title), path: `/projects/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Loyihalar", p]])],
   },
   "/services": {
     title: `Xizmatlar — veb-sayt, web-ilova, backend | ${TAIL}`,
     description: `Veb-sayt yaratish, web-ilovalar, UI/UX dizayn, backend va API, tezlikni optimallash va xavfsizlik. ${SITE_NAME} — ${COMPANY.name} hammuassisi.`,
-    ld: (seo, p) => [webpage(p, "Xizmatlar", "Xizmatlar ro'yxati", "CollectionPage"), itemList(seo.services.map((x) => ({ name: t(x.title), path: `/services/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Xizmatlar", p]])],
+    ld: (seo, p) => [webpage(p, "Xizmatlar", "Xizmatlar ro'yxati", "CollectionPage"), itemList(seo.services.filter((x) => !x.noindex).map((x) => ({ name: t(x.title), path: `/services/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Xizmatlar", p]])],
   },
   "/skills": {
     title: `Ko'nikmalar — React, TypeScript, Node.js, Python | ${TAIL}`,
@@ -167,17 +167,17 @@ const PAGES: Record<string, Page> = {
   "/certificates": {
     title: `Sertifikatlar — ${TAIL} | Software Developer`,
     description: `${SITE_NAME} sertifikatlari va ta'lim yutuqlari: CEFR B2 ingliz tili va dasturlash bo'yicha kurslar.`,
-    ld: (seo, p) => [webpage(p, "Sertifikatlar", "Sertifikatlar ro'yxati", "CollectionPage"), itemList(seo.certificates.map((x) => ({ name: x.title, path: `/certificates/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Sertifikatlar", p]])],
+    ld: (seo, p) => [webpage(p, "Sertifikatlar", "Sertifikatlar ro'yxati", "CollectionPage"), itemList(seo.certificates.filter((x) => !x.noindex).map((x) => ({ name: x.title, path: `/certificates/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Sertifikatlar", p]])],
   },
   "/achievements": {
     title: `Yutuqlar — National AI Hackathon 1-o'rin | ${TAIL}`,
     description: `${SITE_NAME} yutuqlari: 2026-yil National AI Hackathon (Xorazm) g'olibi, 1-o'rin, CarVision loyihasi bilan jamoada.`,
-    ld: (seo, p) => [webpage(p, "Yutuqlar", "Yutuqlar ro'yxati", "CollectionPage"), itemList(seo.achievements.map((x) => ({ name: t(x.title), path: `/achievements/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Yutuqlar", p]])],
+    ld: (seo, p) => [webpage(p, "Yutuqlar", "Yutuqlar ro'yxati", "CollectionPage"), itemList(seo.achievements.filter((x) => !x.noindex).map((x) => ({ name: t(x.title), path: `/achievements/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Yutuqlar", p]])],
   },
   "/events": {
     title: `Tadbirlar — hackathon va konferensiyalar | ${TAIL}`,
     description: `${SITE_NAME} qatnashgan tadbirlar: National AI Hackathon: Khorezm (17–20 sentabr 2026), hackathonlar va dasturchilar tadbirlari.`,
-    ld: (seo, p) => [webpage(p, "Tadbirlar", "Tadbirlar ro'yxati", "CollectionPage"), itemList(seo.events.map((x) => ({ name: x.title, path: `/events/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Tadbirlar", p]])],
+    ld: (seo, p) => [webpage(p, "Tadbirlar", "Tadbirlar ro'yxati", "CollectionPage"), itemList(seo.events.filter((x) => !x.noindex).map((x) => ({ name: x.title, path: `/events/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Tadbirlar", p]])],
   },
   "/gallery": {
     title: `Galereya — fotosuratlar | ${TAIL}, Software Developer`,
@@ -191,7 +191,7 @@ const PAGES: Record<string, Page> = {
   "/blog": {
     title: `Blog — dasturlash, xavfsizlik va AI haqida | ${TAIL}`,
     description: `${SITE_NAME} blogi: veb-xavfsizlik, Supabase RLS, arxitektura, AI bilan dasturlash va karyera haqida amaliy maqolalar.`,
-    ld: (seo, p) => [webpage(p, "Blog", "Maqolalar", "Blog"), itemList(seo.blog.map((x) => ({ name: t(x.title), path: `/blog/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Blog", p]])],
+    ld: (seo, p) => [webpage(p, "Blog", "Maqolalar", "Blog"), itemList(seo.blog.filter((x) => !x.noindex).map((x) => ({ name: t(x.title), path: `/blog/${x.slug}` }))), crumbs([["Bosh sahifa", "/"], ["Blog", p]])],
   },
   "/testimonials": {
     title: `Fikrlar — mijozlar sharhlari | ${TAIL}`,
@@ -259,7 +259,7 @@ export function detailHead(kind: Kind, slug: string, seo: SeoContent | undefined
     const name = t(x.title); const description = t(x.summary);
     const image = shareImage(x.cover);
     return buildHead({
-      path, title: `${name} — loyiha | ${SITE_NAME}`, description: `${description}. ${x.stack.join(", ")}.`, image, imageAlt: `${name} — ${SITE_NAME} loyihasi`,
+      path, noindex: x.noindex, title: `${name} — loyiha | ${SITE_NAME}`, description: `${description}. ${x.stack.join(", ")}.`, image, imageAlt: `${name} — ${SITE_NAME} loyihasi`,
       jsonLd: [webpage(path, name, description, "WebPage", { primaryImageOfPage: { "@id": `${abs(x.cover)}#image` } }), { "@type": "ImageObject", "@id": `${abs(x.cover)}#image`, contentUrl: abs(x.cover), caption: name, creator },
         { "@type": "CreativeWork", "@id": `${abs(path)}#project`, name, description, url: abs(path), image: abs(x.cover), creator, author: creator, keywords: x.stack.join(", "), ...(x.year ? { dateCreated: String(x.year) } : {}), ...(x.liveUrl ? { sameAs: x.liveUrl } : {}), inLanguage: ["uz", "en", "ru"] }, trail(name)],
     });
@@ -268,7 +268,7 @@ export function detailHead(kind: Kind, slug: string, seo: SeoContent | undefined
     const x = data.blog.find((i) => i.slug === slug); if (!x) return missing();
     const name = t(x.title); const description = t(x.excerpt);
     return buildHead({
-      path, title: `${name} | ${SITE_NAME}`, description, type: "article", published: x.date, tags: x.tags, imageAlt: name,
+      path, noindex: x.noindex, title: `${name} | ${SITE_NAME}`, description, type: "article", published: x.date, tags: x.tags, imageAlt: name,
       jsonLd: [webpage(path, name, description, "WebPage"), { "@type": "BlogPosting", "@id": `${abs(path)}#article`, headline: clip(name, 110), description, url: abs(path), mainEntityOfPage: abs(path), datePublished: x.date, dateModified: x.date, image: [shareImage()], author: creator, publisher: creator, keywords: x.tags.join(", "), inLanguage: "uz", ...(x.readMin ? { timeRequired: `PT${x.readMin}M` } : {}) }, trail(name)],
     });
   }
@@ -276,14 +276,14 @@ export function detailHead(kind: Kind, slug: string, seo: SeoContent | undefined
     const x = data.services.find((i) => i.slug === slug); if (!x) return missing();
     const name = t(x.title); const description = t(x.tagline) || t(x.description);
     return buildHead({
-      path, title: `${name} — xizmat | ${SITE_NAME}`, description: `${description} ${t(x.description)}`, image: shareImage(x.cover),
+      path, noindex: x.noindex, title: `${name} — xizmat | ${SITE_NAME}`, description: `${description} ${t(x.description)}`, image: shareImage(x.cover),
       jsonLd: [webpage(path, name, description), { "@type": "Service", "@id": `${abs(path)}#service`, name, description: t(x.description), url: abs(path), provider: creator, areaServed: ["UZ", "Worldwide"], serviceType: name }, trail(name)],
     });
   }
   if (kind === "certificates") {
     const x = data.certificates.find((i) => i.slug === slug); if (!x) return missing();
     return buildHead({
-      path, title: `${x.title} — sertifikat | ${SITE_NAME}`, description: `${x.title} (${x.issuer}, ${x.date}). ${x.skills.join(", ")}.`, image: shareImage(x.image),
+      path, noindex: x.noindex, title: `${x.title} — sertifikat | ${SITE_NAME}`, description: `${x.title} (${x.issuer}, ${x.date}). ${x.skills.join(", ")}.`, image: shareImage(x.image),
       jsonLd: [webpage(path, x.title, `${x.title} — ${x.issuer}`), { "@type": "EducationalOccupationalCredential", "@id": `${abs(path)}#credential`, name: x.title, description: x.skills.join(", "), url: abs(path), recognizedBy: { "@type": "Organization", name: x.issuer }, about: x.skills }, trail(x.title)],
     });
   }
@@ -291,14 +291,14 @@ export function detailHead(kind: Kind, slug: string, seo: SeoContent | undefined
     const x = data.achievements.find((i) => i.slug === slug); if (!x) return missing();
     const name = t(x.title); const description = t(x.description);
     return buildHead({
-      path, title: `${name} | ${SITE_NAME}`, description, type: "article", published: x.date.length === 7 ? `${x.date}-01` : x.date, image: shareImage(x.cover),
+      path, noindex: x.noindex, title: `${name} | ${SITE_NAME}`, description, type: "article", published: x.date.length === 7 ? `${x.date}-01` : x.date, image: shareImage(x.cover),
       jsonLd: [webpage(path, name, description), { "@type": "Article", "@id": `${abs(path)}#article`, headline: clip(name, 110), description, url: abs(path), datePublished: x.date, image: shareImage(x.cover), author: creator, about: creator, inLanguage: "uz" }, trail(name)],
     });
   }
   const x = data.events.find((i) => i.slug === slug); if (!x) return missing();
   const description = t(x.description);
   return buildHead({
-    path, title: `${x.title} — tadbir | ${SITE_NAME}`, description, image: shareImage(x.cover), imageAlt: `${x.title} — ${SITE_NAME}`,
+    path, noindex: x.noindex, title: `${x.title} — tadbir | ${SITE_NAME}`, description, image: shareImage(x.cover), imageAlt: `${x.title} — ${SITE_NAME}`,
     jsonLd: [webpage(path, x.title, description), { "@type": "Event", "@id": `${abs(path)}#event`, name: x.title, description, url: abs(path), startDate: x.date, endDate: x.date === "2026-09-17" ? "2026-09-20" : x.date, eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode", eventStatus: "https://schema.org/EventCompleted", location: { "@type": "Place", name: x.location, address: { "@type": "PostalAddress", addressRegion: "Xorazm", addressCountry: "UZ" } }, image: shareImage(x.cover), performer: creator }, trail(x.title)],
   });
 }

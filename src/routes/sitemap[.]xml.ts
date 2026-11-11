@@ -9,7 +9,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const { getRawContent } = await import("@/lib/content.server");
         const { abs } = await import("@/lib/site");
         const raw = await getRawContent();
-        const list = (k: string) => (Array.isArray(raw[k]) ? (raw[k] as Record<string, unknown>[]) : []);
+        const list = (k: string) => (Array.isArray(raw[k]) ? (raw[k] as Record<string, unknown>[]) : []).filter((x) => x["noindex"] !== true);
         const str = (v: unknown) => (typeof v === "string" ? v : "");
         const loc = (v: unknown) => { const o = v as { uz?: string; en?: string } | undefined; return o?.uz || o?.en || ""; };
         type Img = { src: string; title: string; caption?: string };

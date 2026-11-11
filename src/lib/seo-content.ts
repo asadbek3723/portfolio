@@ -7,16 +7,16 @@ type Rec = Record<string, unknown>;
 
 export interface SeoContent {
   profile: { name: string; role: Loc; bio: Loc; portrait?: string | undefined; socials: { label: string; url: string }[]; location?: Loc | undefined };
-  projects: { slug: string; title: Loc; summary: Loc; cover: string; images: string[]; year?: number | undefined; stack: string[]; liveUrl?: string | undefined; category?: string | undefined }[];
-  services: { slug: string; title: Loc; description: Loc; tagline?: Loc | undefined; cover?: string | undefined }[];
-  blog: { slug: string; title: Loc; excerpt: Loc; date: string; tags: string[]; readMin?: number | undefined }[];
-  certificates: { slug: string; title: string; issuer: string; date: string; image?: string | undefined; skills: string[] }[];
-  achievements: { slug: string; title: Loc; description: Loc; date: string; cover?: string | undefined }[];
-  events: { slug: string; title: string; description: Loc; date: string; location: string; cover: string }[];
+  projects: { slug: string; noindex?: boolean | undefined; title: Loc; summary: Loc; cover: string; images: string[]; year?: number | undefined; stack: string[]; liveUrl?: string | undefined; category?: string | undefined }[];
+  services: { slug: string; noindex?: boolean | undefined; title: Loc; description: Loc; tagline?: Loc | undefined; cover?: string | undefined }[];
+  blog: { slug: string; noindex?: boolean | undefined; title: Loc; excerpt: Loc; date: string; tags: string[]; readMin?: number | undefined }[];
+  certificates: { slug: string; noindex?: boolean | undefined; title: string; issuer: string; date: string; image?: string | undefined; skills: string[] }[];
+  achievements: { slug: string; noindex?: boolean | undefined; title: Loc; description: Loc; date: string; cover?: string | undefined }[];
+  events: { slug: string; noindex?: boolean | undefined; title: string; description: Loc; date: string; location: string; cover: string }[];
   gallery: { id: string; src: string; caption: Loc }[];
   faq: { q: Loc; a: Loc }[];
   skills: { name: string; category: string }[];
-  timeline: { year: string; title: Loc; place: string; description: Loc }[];
+  timeline: { noindex?: boolean | undefined; year: string; title: Loc; place: string; description: Loc }[];
   /** number of published testimonials (empty pages are kept out of search results) */
   testimonials: number;
 }
@@ -29,16 +29,16 @@ export function slim(r: Rec): SeoContent {
   const p = (r["profile"] ?? {}) as Rec;
   return {
     profile: { name: s(p["name"]) || "Asadbek Jumanazarov", role: p["role"] as Loc, bio: p["bio"] as Loc, portrait: s(p["portrait"]) || undefined, socials: arr(p["socials"]) as { label: string; url: string }[], location: p["location"] as Loc },
-    projects: arr(r["projects"]).map((x) => ({ slug: s(x["slug"]), title: x["title"] as Loc, summary: x["summary"] as Loc, cover: s(x["cover"]), images: strs(x["images"]), year: x["year"] as number, stack: strs(x["stack"]), liveUrl: s(x["liveUrl"]) || undefined, category: s(x["category"]) })),
-    services: arr(r["services"]).map((x) => ({ slug: s(x["slug"]), title: x["title"] as Loc, description: x["description"] as Loc, tagline: x["tagline"] as Loc, cover: s(x["cover"]) || undefined })),
-    blog: arr(r["blog"]).map((x) => ({ slug: s(x["slug"]), title: x["title"] as Loc, excerpt: x["excerpt"] as Loc, date: s(x["date"]), tags: strs(x["tags"]), readMin: x["readMin"] as number })),
-    certificates: arr(r["certificates"]).map((x) => ({ slug: s(x["slug"]), title: s(x["title"]), issuer: s(x["issuer"]), date: s(x["date"]), image: s(x["image"]) || undefined, skills: strs(x["skills"]) })),
-    achievements: arr(r["achievements"]).map((x) => ({ slug: s(x["slug"]), title: x["title"] as Loc, description: x["description"] as Loc, date: s(x["date"]), cover: s(x["cover"]) || undefined })),
-    events: arr(r["events"]).map((x) => ({ slug: s(x["slug"]), title: s(x["title"]), description: x["description"] as Loc, date: s(x["date"]), location: s(x["location"]), cover: s(x["cover"]) })),
+    projects: arr(r["projects"]).map((x) => ({ slug: s(x["slug"]), noindex: x["noindex"] === true, title: x["title"] as Loc, summary: x["summary"] as Loc, cover: s(x["cover"]), images: strs(x["images"]), year: x["year"] as number, stack: strs(x["stack"]), liveUrl: s(x["liveUrl"]) || undefined, category: s(x["category"]) })),
+    services: arr(r["services"]).map((x) => ({ slug: s(x["slug"]), noindex: x["noindex"] === true, title: x["title"] as Loc, description: x["description"] as Loc, tagline: x["tagline"] as Loc, cover: s(x["cover"]) || undefined })),
+    blog: arr(r["blog"]).map((x) => ({ slug: s(x["slug"]), noindex: x["noindex"] === true, title: x["title"] as Loc, excerpt: x["excerpt"] as Loc, date: s(x["date"]), tags: strs(x["tags"]), readMin: x["readMin"] as number })),
+    certificates: arr(r["certificates"]).map((x) => ({ slug: s(x["slug"]), noindex: x["noindex"] === true, title: s(x["title"]), issuer: s(x["issuer"]), date: s(x["date"]), image: s(x["image"]) || undefined, skills: strs(x["skills"]) })),
+    achievements: arr(r["achievements"]).map((x) => ({ slug: s(x["slug"]), noindex: x["noindex"] === true, title: x["title"] as Loc, description: x["description"] as Loc, date: s(x["date"]), cover: s(x["cover"]) || undefined })),
+    events: arr(r["events"]).map((x) => ({ slug: s(x["slug"]), noindex: x["noindex"] === true, title: s(x["title"]), description: x["description"] as Loc, date: s(x["date"]), location: s(x["location"]), cover: s(x["cover"]) })),
     gallery: arr(r["gallery"]).map((x) => ({ id: s(x["id"]), src: s(x["src"]), caption: x["caption"] as Loc })),
     faq: arr(r["faq"]).map((x) => ({ q: x["q"] as Loc, a: x["a"] as Loc })),
     skills: arr(r["skills"]).map((x) => ({ name: s(x["name"]), category: s(x["category"]) })).filter((x) => x.name),
-    timeline: arr(r["timeline"]).map((x) => ({ year: s(x["year"]), title: x["title"] as Loc, place: s(x["place"]), description: x["description"] as Loc })),
+    timeline: arr(r["timeline"]).map((x) => ({ noindex: x["noindex"] === true, year: s(x["year"]), title: x["title"] as Loc, place: s(x["place"]), description: x["description"] as Loc })),
     testimonials: arr(r["testimonials"]).length,
   };
 }

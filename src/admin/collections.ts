@@ -32,6 +32,8 @@ const f = {
   arr: (key: string, label: string, item: Field): Field => ({ key, label, type: "array", item, wide: true }),
 };
 
+const hide = f.bool("noindex", "Google/Bing qidiruvida chiqmasin (noindex)");
+
 const media = f.obj("", "Media", [f.sel("type", "Turi", ["image", "video"]), f.img("src", "Fayl"), f.img("poster", "Poster", true), { ...f.loc("caption", "Izoh"), optional: true }]);
 
 export interface CollectionConfig {
@@ -59,7 +61,7 @@ export const collections: CollectionConfig[] = [
     title: (x) => locTitle(x["title"]), subtitle: (x) => `${x["year"]} · ${x["category"]}`, image: (x) => x["cover"] as string,
     sitePath: (x) => `/projects/${x["slug"]}`,
     fields: [
-      f.loc("title", "Sarlavha"), f.text("slug", "Slug (manzil)"), f.num("year", "Yil"),
+      f.loc("title", "Sarlavha"), f.text("slug", "Slug (manzil)"), hide, f.num("year", "Yil"),
       f.sel("category", "Kategoriya", ["fullstack", "mobile", "web", "open-source"]), f.bool("featured", "Bosh sahifada"),
       f.img("cover", "Muqova"), f.loc("summary", "Qisqacha", true), f.loc("problem", "Muammo", true), f.loc("solution", "Yechim", true),
       f.tags("stack", "Texnologiyalar"), f.arr("images", "Rasmlar", f.img("", "Rasm")), f.url("liveUrl", "Sayt havolasi"), f.url("repoUrl", "Kod havolasi"),
@@ -79,7 +81,7 @@ export const collections: CollectionConfig[] = [
     title: (x) => locTitle(x["title"]), subtitle: (x) => locTitle(x["price"]), image: (x) => x["cover"] as string | undefined,
     sitePath: (x) => `/services/${x["slug"]}`,
     fields: [
-      f.loc("title", "Nomi"), f.text("slug", "Slug"), f.text("icon", "Ikonka nomi"), f.loc("price", "Narx"),
+      f.loc("title", "Nomi"), f.text("slug", "Slug"), hide, f.text("icon", "Ikonka nomi"), f.loc("price", "Narx"),
       f.loc("description", "Tavsif", true), { ...f.loc("tagline", "Shior"), optional: true }, { ...f.loc("timeline", "Muddat"), optional: true }, f.img("cover", "Muqova", true),
       f.obj("detail", "Batafsil sahifa", [
         f.text("slug", "Slug"), f.img("cover", "Muqova"), f.loc("tagline", "Shior"), f.loc("overview", "Umumiy", true),
@@ -96,7 +98,7 @@ export const collections: CollectionConfig[] = [
     key: "blog", label: "Blog", singular: "maqola", icon: "Newspaper", group: "content",
     title: (x) => locTitle(x["title"]), subtitle: (x) => `${x["date"]} · ${x["readMin"]} min`, sitePath: (x) => `/blog/${x["slug"]}`,
     fields: [
-      f.loc("title", "Sarlavha"), f.text("slug", "Slug"), f.date("date", "Sana"), f.num("readMin", "O'qish vaqti (daq)"),
+      f.loc("title", "Sarlavha"), f.text("slug", "Slug"), hide, f.date("date", "Sana"), f.num("readMin", "O'qish vaqti (daq)"),
       f.tags("tags", "Teglar"), f.loc("excerpt", "Qisqacha", true),
       { ...f.loc("body", "Matn (paragraflar bo'sh qator bilan ajratiladi)", true), help: "body" },
     ],
@@ -111,7 +113,7 @@ export const collections: CollectionConfig[] = [
     title: (x) => String(x["title"]), subtitle: (x) => `${x["issuer"]} · ${x["date"]}`, image: (x) => x["image"] as string | undefined,
     sitePath: (x) => `/certificates/${x["slug"]}`,
     fields: [
-      f.text("title", "Nomi"), f.text("slug", "Slug"), f.text("issuer", "Beruvchi"), f.date("date", "Sana"), f.tags("skills", "Ko'nikmalar"),
+      f.text("title", "Nomi"), f.text("slug", "Slug"), hide, f.text("issuer", "Beruvchi"), f.date("date", "Sana"), f.tags("skills", "Ko'nikmalar"),
       f.text("credentialId", "ID", { optional: true }), f.num("hours", "Soat"), f.url("verifyUrl", "Tekshirish havolasi"), f.img("image", "Rasm", true),
       f.obj("detail", "Batafsil", [f.text("slug", "Slug"), f.text("credentialId", "ID"), f.num("hours", "Soat"), f.tags("skills", "Ko'nikmalar"), f.loc("description", "Tavsif", true), f.img("image", "Rasm"), f.url("verifyUrl", "Havola", false)], true),
     ],
@@ -121,7 +123,7 @@ export const collections: CollectionConfig[] = [
     title: (x) => locTitle(x["title"]), subtitle: (x) => `${locTitle(x["place"])} · ${x["date"]}`, image: (x) => x["cover"] as string | undefined,
     sitePath: (x) => `/achievements/${x["slug"]}`,
     fields: [
-      f.loc("title", "Nomi"), f.text("slug", "Slug"), f.date("date", "Sana"), f.loc("place", "O'rin"), f.loc("description", "Tavsif", true), f.img("cover", "Muqova", true),
+      f.loc("title", "Nomi"), f.text("slug", "Slug"), hide, f.date("date", "Sana"), f.loc("place", "O'rin"), f.loc("description", "Tavsif", true), f.img("cover", "Muqova", true),
       f.obj("detail", "Batafsil", [
         f.text("slug", "Slug"), f.img("cover", "Muqova"), f.loc("story", "Hikoya", true), f.loc("built", "Nima qurildi", true), f.loc("team", "Jamoa"),
         f.obj("feedback", "Fikr", [f.loc("quote", "Iqtibos", true), f.text("author", "Muallif")], true),
@@ -135,7 +137,7 @@ export const collections: CollectionConfig[] = [
     title: (x) => String(x["title"]), subtitle: (x) => `${x["location"]} · ${x["date"]}`, image: (x) => x["cover"] as string,
     sitePath: (x) => `/events/${x["slug"]}`,
     fields: [
-      f.text("title", "Nomi"), f.text("slug", "Slug"), f.text("location", "Joy"), f.date("date", "Sana"), f.loc("role", "Rolim"), f.loc("description", "Tavsif", true), f.img("cover", "Muqova"),
+      f.text("title", "Nomi"), f.text("slug", "Slug"), hide, f.text("location", "Joy"), f.date("date", "Sana"), f.loc("role", "Rolim"), f.loc("description", "Tavsif", true), f.img("cover", "Muqova"),
       f.obj("detail", "Batafsil", [
         f.text("slug", "Slug"), f.img("cover", "Muqova"), f.loc("story", "Hikoya", true), f.arr("highlights", "Muhim lahzalar", f.loc("", "Lahza")),
         f.arr("outcomes", "Natijalar", f.obj("", "Natija", [f.num("value", "Qiymat"), f.text("suffix", "Qo'shimcha", { optional: true }), f.loc("label", "Yorliq")])),
@@ -161,7 +163,7 @@ export const collections: CollectionConfig[] = [
   {
     key: "timeline", label: "Tajriba tarixi", singular: "bosqich", icon: "History", group: "about",
     title: (x) => locTitle(x["title"]), subtitle: (x) => `${x["year"]} · ${x["place"]}`,
-    fields: [f.text("year", "Yil"), f.loc("title", "Nomi"), f.text("place", "Joy"), f.loc("description", "Tavsif", true)],
+    fields: [f.text("year", "Yil"), f.loc("title", "Nomi"), f.text("place", "Joy"), hide, f.loc("description", "Tavsif", true)],
   },
   {
     key: "uses", label: "Asboblar", singular: "asbob", icon: "Wrench", group: "about",

@@ -7,6 +7,7 @@ import { abs, COMPANY, JOB_TITLE, SITE_NAME } from "./site";
 type Rec = Record<string, unknown>;
 type Loc = { uz?: string; en?: string; ru?: string };
 
+const visible = (x: Rec) => x["noindex"] !== true;
 const arr = (v: unknown): Rec[] => (Array.isArray(v) ? (v as Rec[]) : []);
 const s = (v: unknown) => (typeof v === "string" ? v.trim() : typeof v === "number" ? String(v) : "");
 const strs = (v: unknown) => (Array.isArray(v) ? (v as unknown[]).map(s).filter(Boolean) : []);
@@ -21,15 +22,15 @@ export async function buildLlms(full: boolean): Promise<string> {
   const name = s(p["name"]) || SITE_NAME;
   const socials = arr(p["socials"]).filter((x) => /^https?:\/\//.test(s(x["url"])));
   const portrait = s(p["portrait"]);
-  const projects = arr(raw["projects"]);
+  const projects = arr(raw["projects"]).filter(visible);
   const skills = arr(raw["skills"]);
-  const timeline = arr(raw["timeline"]);
-  const achievements = arr(raw["achievements"]);
-  const events = arr(raw["events"]);
-  const certificates = arr(raw["certificates"]);
-  const services = arr(raw["services"]);
+  const timeline = arr(raw["timeline"]).filter(visible);
+  const achievements = arr(raw["achievements"]).filter(visible);
+  const events = arr(raw["events"]).filter(visible);
+  const certificates = arr(raw["certificates"]).filter(visible);
+  const services = arr(raw["services"]).filter(visible);
   const gallery = arr(raw["gallery"]);
-  const blog = arr(raw["blog"]);
+  const blog = arr(raw["blog"]).filter(visible);
   const faq = arr(raw["faq"]);
 
   const out: string[] = [];
