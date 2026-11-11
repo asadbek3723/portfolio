@@ -16,7 +16,10 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CvRouteImport } from './routes/cv'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as MatchRouteImport } from './routes/match'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SkillsRouteImport } from './routes/skills'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
@@ -79,9 +82,24 @@ const GalleryRoute = GalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
+  id: '/llms-full.txt',
+  path: '/llms-full.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MatchRoute = MatchRouteImport.update({
   id: '/match',
   path: '/match',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -225,7 +243,10 @@ export interface FileRoutesByFullPath {
   '/cv': typeof CvRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/match': typeof MatchRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skills': typeof SkillsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -260,7 +281,10 @@ export interface FileRoutesByTo {
   '/cv': typeof CvRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/match': typeof MatchRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skills': typeof SkillsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -296,7 +320,10 @@ export interface FileRoutesById {
   '/cv': typeof CvRoute
   '/faq': typeof FaqRoute
   '/gallery': typeof GalleryRoute
+  '/llms-full.txt': typeof LlmsFullDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/match': typeof MatchRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/skills': typeof SkillsRoute
   '/testimonials': typeof TestimonialsRoute
@@ -334,7 +361,10 @@ export interface FileRouteTypes {
     | '/cv'
     | '/faq'
     | '/gallery'
+    | '/llms-full.txt'
+    | '/llms.txt'
     | '/match'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/skills'
     | '/testimonials'
@@ -369,7 +399,10 @@ export interface FileRouteTypes {
     | '/cv'
     | '/faq'
     | '/gallery'
+    | '/llms-full.txt'
+    | '/llms.txt'
     | '/match'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/skills'
     | '/testimonials'
@@ -404,7 +437,10 @@ export interface FileRouteTypes {
     | '/cv'
     | '/faq'
     | '/gallery'
+    | '/llms-full.txt'
+    | '/llms.txt'
     | '/match'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/skills'
     | '/testimonials'
@@ -441,7 +477,10 @@ export interface RootRouteChildren {
   CvRoute: typeof CvRoute
   FaqRoute: typeof FaqRoute
   GalleryRoute: typeof GalleryRoute
+  LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   MatchRoute: typeof MatchRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SkillsRoute: typeof SkillsRoute
   TestimonialsRoute: typeof TestimonialsRoute
@@ -511,11 +550,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/llms-full.txt': {
+      id: '/llms-full.txt'
+      path: '/llms-full.txt'
+      fullPath: '/llms-full.txt'
+      preLoaderRoute: typeof LlmsFullDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/match': {
       id: '/match'
       path: '/match'
       fullPath: '/match'
       preLoaderRoute: typeof MatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -751,7 +811,10 @@ const rootRouteChildren: RootRouteChildren = {
   CvRoute: CvRoute,
   FaqRoute: FaqRoute,
   GalleryRoute: GalleryRoute,
+  LlmsFullDottxtRoute: LlmsFullDottxtRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   MatchRoute: MatchRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SkillsRoute: SkillsRoute,
   TestimonialsRoute: TestimonialsRoute,

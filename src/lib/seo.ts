@@ -88,20 +88,47 @@ export function buildHead(i: HeadInput) {
 const personId = `${SITE_URL}/#person`;
 const websiteId = `${SITE_URL}/#website`;
 
+/** Photos of the person: the portrait first, then every gallery photo (all of them show Asadbek or his team). */
+function personImages(seo: SeoContent): Json[] {
+  const p = seo.profile;
+  const portrait = abs(p.portrait || SHARE_CARD);
+  const photos: Json[] = [{ "@type": "ImageObject", "@id": `${portrait}#image`, url: portrait, contentUrl: portrait, caption: `${p.name} — ${JOB_TITLE}, Co-Founder of ${COMPANY.name}`, creditText: SITE_NAME, creator: { "@id": personId }, copyrightNotice: `© ${SITE_NAME}`, acquireLicensePage: abs("/contact"), representativeOfPage: true }];
+  for (const g of seo.gallery) {
+    const url = abs(g.src);
+    if (url !== portrait) photos.push({ "@type": "ImageObject", "@id": `${url}#image`, url, contentUrl: url, caption: t(g.caption) || p.name, creditText: SITE_NAME, creator: { "@id": personId }, copyrightNotice: `© ${SITE_NAME}`, acquireLicensePage: abs("/contact") });
+  }
+  return photos;
+}
+
 function person(seo: SeoContent): Json {
   const p = seo.profile;
+  const skillNames = seo.skills.map((x) => x.name);
+  const knowsAbout = [...new Set(["Web development", "Full-stack development", ...skillNames, "Application security", "Penetration testing", "AI integration"])];
   return {
-    "@type": "Person", "@id": personId, name: p.name, alternateName: ["Asadbek Jumanazarov Azamat o'g'li", "Jumanazarov Asadbek"],
-    jobTitle: JOB_TITLE, description: clip(clean(t(p.bio)), 300), url: SITE_URL,
-    image: { "@type": "ImageObject", url: abs(p.portrait || SHARE_CARD), caption: `${p.name} — ${JOB_TITLE}` },
+    "@type": "Person", "@id": personId, name: p.name,
+    alternateName: ["Asadbek Jumanazarov Azamat o'g'li", "Jumanazarov Asadbek", "Asadbek Jumanazarov Azamatovich", "Асадбек Жуманазаров", "Жуманазаров Асадбек"],
+    givenName: "Asadbek", familyName: "Jumanazarov",
+    jobTitle: [JOB_TITLE, "Full-Stack Developer", `Co-Founder of ${COMPANY.name}`],
+    description: clip(clean(t(p.bio)), 300), disambiguatingDescription: `${JOB_TITLE} and Co-Founder of ${COMPANY.name} from Shovot, Khorezm, Uzbekistan; 1st place winner of the National AI Hackathon: Khorezm 2026 with CarVision.`,
+    url: SITE_URL, mainEntityOfPage: abs("/about"),
+    image: personImages(seo),
     sameAs: p.socials.map((x) => x.url).filter((u) => /^https?:\/\//.test(u)),
     worksFor: { "@type": "Organization", name: COMPANY.name },
+    hasOccupation: seo.timeline.map((x) => ({ "@type": "Occupation", name: t(x.title), description: clip(clean(t(x.description)), 300), occupationLocation: { "@type": "Place", name: x.place } })),
     address: { "@type": "PostalAddress", addressLocality: "Shovot", addressRegion: "Xorazm", addressCountry: "UZ" },
+    homeLocation: { "@type": "Place", name: "Shovot, Khorezm, Uzbekistan" },
     nationality: { "@type": "Country", name: "Uzbekistan" },
     knowsLanguage: ["uz", "en", "ru"],
-    knowsAbout: ["Web development", "Full-stack development", "React", "TypeScript", "Node.js", "Python", "PostgreSQL", "Supabase", "Application security", "Penetration testing", "AI integration"],
+    knowsAbout,
+    award: seo.achievements.map((x) => `${t(x.title)} (${x.date})`),
+    hasCredential: seo.certificates.map((x) => ({ "@type": "EducationalOccupationalCredential", name: x.title, url: abs(`/certificates/${x.slug}`), recognizedBy: { "@type": "Organization", name: x.issuer }, ...(x.date ? { dateCreated: x.date } : {}) })),
+    performerIn: seo.events.map((x) => ({ "@type": "Event", name: x.title, startDate: x.date, url: abs(`/events/${x.slug}`), location: { "@type": "Place", name: x.location } })),
+    subjectOf: seo.achievements.map((x) => ({ "@id": `${abs(`/achievements/${x.slug}`)}#article` })),
   };
 }
+
+/** Projects as CreativeWorks made by the person, for the home and about pages. */
+const projectWorks = (seo: SeoContent): Json[] => seo.projects.map((x) => ({ "@type": "CreativeWork", "@id": `${abs(`/projects/${x.slug}`)}#project`, name: t(x.title), description: clip(clean(t(x.summary)), 300), url: abs(`/projects/${x.slug}`), image: abs(x.cover), creator: { "@id": personId }, keywords: x.stack.join(", "), ...(x.year ? { dateCreated: String(x.year) } : {}) }));
 const website = (): Json => ({ "@type": "WebSite", "@id": websiteId, url: SITE_URL, name: `${SITE_NAME} — ${JOB_TITLE}`, inLanguage: ["uz", "en", "ru"], publisher: { "@id": personId } });
 const webpage = (path: string, name: string, description: string, type = "WebPage", extra: Json = {}): Json => ({ "@type": type, "@id": `${abs(path)}#webpage`, url: abs(path), name, description: clip(clean(description), 300), isPartOf: { "@id": websiteId }, about: { "@id": personId }, inLanguage: "uz", ...extra });
 const crumbs = (items: [string, string][]): Json => ({ "@type": "BreadcrumbList", itemListElement: items.map(([name, path], idx) => ({ "@type": "ListItem", position: idx + 1, name, item: abs(path) })) });
@@ -115,12 +142,12 @@ const PAGES: Record<string, Page> = {
   "/": {
     title: `${SITE_NAME} — ${JOB_TITLE} | Co-Founder of ${COMPANY.name}`,
     description: `${SITE_NAME} — Full-Stack dasturchi (Software Developer) va ${COMPANY.name} hammuassisi, Xorazm, O'zbekiston. Veb-platformalar, admin panellar, AI integratsiyali web-ilovalar va ilovalar xavfsizligi. Loyihalar, xizmatlar va aloqa.`,
-    ld: (seo) => [website(), person(seo), webpage("/", `${SITE_NAME} — ${JOB_TITLE}`, t(seo.profile.bio), "WebPage")],
+    ld: (seo) => [website(), person(seo), webpage("/", `${SITE_NAME} — ${JOB_TITLE}`, t(seo.profile.bio), "ProfilePage", { mainEntity: { "@id": personId }, primaryImageOfPage: { "@id": `${abs(seo.profile.portrait || SHARE_CARD)}#image` } }), ...projectWorks(seo)],
   },
   "/about": {
     title: `Men haqimda — ${SITE_NAME} | ${JOB_TITLE}`,
     description: `${SITE_NAME} kim? Full-Stack dasturchi, ${COMPANY.name} hammuassisi. Tajriba, ko'nikmalar, hackathon g'alabasi va ish tarixi: React, TypeScript, Node.js, Python, PostgreSQL, Supabase.`,
-    ld: (seo, p) => [person(seo), webpage(p, `Men haqimda — ${SITE_NAME}`, t(seo.profile.bio), "ProfilePage", { mainEntity: { "@id": personId } }), crumbs([["Bosh sahifa", "/"], ["Men haqimda", p]])],
+    ld: (seo, p) => [person(seo), webpage(p, `Men haqimda — ${SITE_NAME}`, t(seo.profile.bio), "ProfilePage", { mainEntity: { "@id": personId }, primaryImageOfPage: { "@id": `${abs(seo.profile.portrait || SHARE_CARD)}#image` } }), ...projectWorks(seo), crumbs([["Bosh sahifa", "/"], ["Men haqimda", p]])],
   },
   "/projects": {
     title: `Loyihalar — ${TAIL} | Veb-platformalar va ilovalar`,

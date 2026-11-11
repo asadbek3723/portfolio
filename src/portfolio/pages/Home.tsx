@@ -83,7 +83,7 @@ export const Home: React.FC = () => {
           >
             <img
               {...responsiveImage(profileData.portrait || '/assets/asadbek-jumanazarov-software-developer.jpg', '(min-width: 768px) 40vw, 384px')}
-              alt={profileData.name}
+              alt={`${profileData.name} — Software Developer, TriCorp hammuassisi`}
               width={768}
               height={960}
               fetchPriority="high"

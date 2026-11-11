@@ -24,6 +24,9 @@ export const Route = createFileRoute("/sitemap.xml")({
         ];
         const gallery = list("gallery").flatMap((g) => img(g["src"], loc(g["caption"]) || "Asadbek Jumanazarov", loc(g["caption"])));
         const galleryEntry = entries.find((e) => e.path === "/gallery"); if (galleryEntry) galleryEntry.images = gallery;
+        // The strongest pages also list every photo of Asadbek, so image search ties them to his name.
+        const portrait = img(profile["portrait"], "Asadbek Jumanazarov — Software Developer, Co-Founder of TriCorp", "Asadbek Jumanazarov portreti");
+        for (const e of entries) if (e.path === "/" || e.path === "/about") e.images = [...(e.path === "/" ? e.images : portrait), ...gallery.filter((g) => g.src !== str(profile["portrait"]))];
         for (const x of list("projects")) entries.push({ path: `/projects/${x["slug"]}`, priority: "0.8", images: [...img(x["cover"], `${loc(x["title"])} — loyiha`, loc(x["summary"])), ...(Array.isArray(x["images"]) ? (x["images"] as string[]).filter((s) => s !== x["cover"]).flatMap((s) => img(s, `${loc(x["title"])} — skrinshot`)) : [])] });
         for (const x of list("blog")) entries.push({ path: `/blog/${x["slug"]}`, lastmod: date(str(x["date"])), priority: "0.8", images: [] });
         for (const x of list("services")) entries.push({ path: `/services/${x["slug"]}`, priority: "0.7", images: img(x["cover"], loc(x["title"])) });

@@ -15,6 +15,8 @@ export interface SeoContent {
   events: { slug: string; title: string; description: Loc; date: string; location: string; cover: string }[];
   gallery: { id: string; src: string; caption: Loc }[];
   faq: { q: Loc; a: Loc }[];
+  skills: { name: string; category: string }[];
+  timeline: { year: string; title: Loc; place: string; description: Loc }[];
   /** number of published testimonials (empty pages are kept out of search results) */
   testimonials: number;
 }
@@ -35,6 +37,8 @@ export function slim(r: Rec): SeoContent {
     events: arr(r["events"]).map((x) => ({ slug: s(x["slug"]), title: s(x["title"]), description: x["description"] as Loc, date: s(x["date"]), location: s(x["location"]), cover: s(x["cover"]) })),
     gallery: arr(r["gallery"]).map((x) => ({ id: s(x["id"]), src: s(x["src"]), caption: x["caption"] as Loc })),
     faq: arr(r["faq"]).map((x) => ({ q: x["q"] as Loc, a: x["a"] as Loc })),
+    skills: arr(r["skills"]).map((x) => ({ name: s(x["name"]), category: s(x["category"]) })).filter((x) => x.name),
+    timeline: arr(r["timeline"]).map((x) => ({ year: s(x["year"]), title: x["title"] as Loc, place: s(x["place"]), description: x["description"] as Loc })),
     testimonials: arr(r["testimonials"]).length,
   };
 }
@@ -43,5 +47,6 @@ export const seedRaw = (): Rec => ({
   profile: seed.profileData, projects: seed.projectsData, services: seed.servicesData, blog: seed.blogData,
   certificates: seed.certificatesData, achievements: seed.achievementsData, events: seed.eventsData,
   gallery: seed.galleryData, faq: seed.faqData, testimonials: seed.testimonialsData,
+  skills: seed.skillsData, timeline: seed.timelineData,
 });
 export const seedSeo = () => slim(seedRaw());
