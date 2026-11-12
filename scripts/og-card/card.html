@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  @font-face { font-family: "Syne"; src: url("../../node_modules/@fontsource-variable/syne/files/syne-latin-wght-normal.woff2") format("woff2"); font-weight: 400 800; }
+  @font-face { font-family: "Manrope"; src: url("../../node_modules/@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2") format("woff2"); font-weight: 200 800; }
+  @font-face { font-family: "JBM"; src: url("../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 800; }
+
+  :root { --bg: #060708; --ink: #f4f5f0; --muted: #8b8f88; --line: rgba(255,255,255,.09); --lime: #c8f53c; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; background: var(--bg); overflow: hidden; }
+  body { position: relative; font-family: "Manrope", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  /* blueprint grid, fading out toward the portrait */
+  .grid { position: absolute; inset: 0;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px; background-position: 24px 24px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 90% at 18% 50%, #000 10%, transparent 75%); opacity: .55; }
+
+  /* portrait */
+  .photo { position: absolute; top: 0; right: 0; width: 560px; height: 630px; overflow: hidden; }
+  .photo img { position: absolute; width: 600px; left: -10px; top: -40px; filter: contrast(1.06) saturate(.92); }
+  .photo::after { content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, var(--bg) 0%, rgba(6,7,8,.85) 14%, rgba(6,7,8,0) 42%),
+      linear-gradient(0deg, var(--bg) 0%, rgba(6,7,8,0) 26%); }
+  .glow { position: absolute; right: -120px; top: 120px; width: 520px; height: 520px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,245,60,.16), transparent 65%); }
+
+  /* viewfinder marks around the portrait */
+  .mark { position: absolute; width: 22px; height: 22px; border-color: var(--lime); border-style: solid; border-width: 0; }
+  .m1 { left: 742px; top: 44px;  border-top-width: 2px; border-left-width: 2px; }
+  .m2 { right: 44px; top: 44px;  border-top-width: 2px; border-right-width: 2px; }
+  .m3 { left: 742px; bottom: 44px; border-bottom-width: 2px; border-left-width: 2px; }
+  .m4 { right: 44px; bottom: 44px; border-bottom-width: 2px; border-right-width: 2px; }
+  .tag { position: absolute; right: 74px; bottom: 50px; font-family: "JBM"; font-size: 13px; letter-spacing: .08em; color: rgba(244,245,240,.72); }
+  .tag b { color: var(--lime); font-weight: 600; }
+
+  /* left column */
+  .col { position: absolute; left: 72px; top: 60px; bottom: 56px; width: 640px; display: flex; flex-direction: column; }
+  .top { display: flex; align-items: center; gap: 18px; font-family: "JBM"; font-size: 14px; letter-spacing: .14em; color: var(--muted); }
+  .logo { font-family: "Syne"; font-weight: 800; font-size: 28px; letter-spacing: 0; color: var(--ink); }
+  .logo i { color: var(--lime); font-style: normal; }
+  .sep { width: 1px; height: 18px; background: rgba(255,255,255,.2); }
+
+  .main { margin-top: auto; margin-bottom: auto; padding-top: 8px; }
+  .eyebrow { display: flex; align-items: center; gap: 14px; font-family: "JBM"; font-weight: 500; font-size: 17px; letter-spacing: .22em; color: var(--lime); }
+  .eyebrow::before { content: ""; width: 36px; height: 2px; background: var(--lime); }
+  h1 { margin-top: 22px; font-family: "Syne"; font-weight: 800; font-size: 80px; line-height: .98; letter-spacing: -.03em; }
+  h1 span { display: block; }
+  h1 .last i { font-style: normal; color: var(--lime); }
+  .lede { margin-top: 26px; font-size: 22px; line-height: 1.45; font-weight: 500; color: #c3c6bf; max-width: 520px; }
+
+  .meta { display: grid; grid-template-columns: auto auto auto; gap: 0; border-top: 1px solid rgba(255,255,255,.12); padding-top: 18px; width: 600px; }
+  .meta div { padding-right: 26px; margin-right: 26px; border-right: 1px solid rgba(255,255,255,.12); }
+  .meta div:last-child { border-right: 0; margin-right: 0; padding-right: 0; }
+  .meta small { display: block; font-family: "JBM"; font-size: 11.5px; letter-spacing: .18em; color: var(--muted); }
+  .meta p { margin-top: 6px; font-size: 17px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .meta p i { font-style: normal; color: var(--lime); }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="glow"></div>
+  <div class="photo"><img src="../../public/assets/asadbek-jumanazarov-software-developer.jpg" alt="" /></div>
+  <span class="mark m1"></span><span class="mark m2"></span><span class="mark m3"></span><span class="mark m4"></span>
+
+  <div class="col">
+    <div class="top"><span class="logo">AJ<i>.</i></span><span class="sep"></span><span>PORTFOLIO</span></div>
+
+    <div class="main">
+      <div class="eyebrow">SOFTWARE ENGINEER</div>
+      <h1><span>Asadbek</span><span class="last">Jumanazarov<i>.</i></span></h1>
+      <p class="lede">Designing and building reliable software — from first idea to production.</p>
+    </div>
+
+    <div class="meta">
+      <div><small>FOCUS</small><p>Full-stack &amp; AI</p></div>
+      <div><small>CO-FOUNDER</small><p>TriCorp</p></div>
+      <div><small>WEBSITE</small><p>jumanazarov<i>.uz</i></p></div>
+    </div>
+  </div>
+</body>
+</html>
